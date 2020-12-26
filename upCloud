@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+#UFUNCTION=自动同步当前项目至gitee仓库
+
+#同步到 gitee仓库
+pwd
+git status
+git add .
+if [[ $# -eq 0 ]];then
+	dat=$(date +%Y/%m/%d\ %H:%M:%S)
+else
+	dat=$*
+fi
+git commit -m "$dat"
+git push gitee master
+
