@@ -1,0 +1,41 @@
+#!/bin/bash 
+#为自定义的可执行文件提供说明
+#by yuanhp 2020
+
+F_TYPE="UFUNCTION" #要列入统计范畴的自定义文件标志
+
+dis_echo()
+{
+    echo -e "\033[35m$*\033[0m"
+}
+function note()
+{
+    echo -e "\033[32m$*\033[0m"
+}
+
+#clear
+dir=`dirname $0`
+cd $dir
+dis_echo "-----------------通用自定义指令功能说明-----------------"
+tfile=/tmp/uhelp.txt
+echo "序号 |指令 |功能说明" > $tfile
+FILE=`ls -l | grep ^- | awk '{print $9}'`
+idx=0
+
+for i in $FILE
+do
+    #echo $i
+    if [ "$i" = "uhelp" ];then #不读取本身
+        continue
+    fi
+	jp=`awk -F'=' '/UFUNCTION=/{print $2}' $i` #判断文件是否为要统计的脚本文件
+	if [ -z $jp ];then #空跳转
+		continue
+  	fi 
+    echo "$idx |$i |$jp" >> $tfile
+    idx=$[idx+1]
+done
+
+cat $tfile | column -s \  -t  #在终端以表格的形式显示
+dis_echo "--------------------------------------------------------"
+exit 0

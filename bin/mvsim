@@ -1,0 +1,268 @@
+#!/bin/bash
+#UFUNCTION=iverilog个人仿真脚本
+#by yunahp 2020/6/4
+#######################   iverilog仿真脚本   #######################
+dir=$(pwd)
+#------------------------------help-------------------------------
+if [ "$1" = "-help" ] || [ "$1" = "-h" ];then #帮助
+    echo "Usage : mvsim [option]"
+    echo "  mvsim           	仿真波形显示一条龙服务"
+    echo "  mvsim -init     	生成iverilog testbech模板"
+    echo "  mvsim -help     	帮助"
+	echo "  mvsim -clk      	创建clk任意分频模块"
+    echo "  mvsim -r        	刷新仿真波形文件"
+	echo "  mvsim -m module 	创建module.v文件"
+	echo "  mvsim -sm module	创建module.sv文件"
+	echo "  mvsim filename	对单文件进行语法分析"
+    echo 
+    exit 0
+fi
+# -----------------------------init ------------------------------
+if [ "$1" = "-init" ] || [ "$1" = "-i" ];then #生成iverilog testbech模板
+	if [ ! -f run.sh ];then
+		echo "#!/bin/bash" > run.sh
+		echo "clear">>run.sh
+		echo "mvsim \$*" >> run.sh
+		chmod +x run.sh
+		echo "info:已生成run脚本"
+	fi
+    if [ -f tb.v ];then
+        echo "fail:初始化失败，已存在tb.v文件！"
+        exit 0
+    fi
+cat <<EOF >tb.v
+\`timescale 1ns / 1ps
+module tb ;
+reg clk,rst_n;
+
+//生成始时钟
+parameter NCLK = 4;
+initial begin
+	clk=0;
+	forever clk=#(NCLK/2) ~clk; 
+end 
+
+/****************** BEGIN ADD module inst ******************/
+//Modulenamme top (rst_n,clk);
+/****************** BEGIN END module inst ******************/
+
+initial begin
+    \$dumpfile("wave.lxt2");
+    \$dumpvars(0, tb);   //dumpvars(深度, 实例化模块1，实例化模块2，.....)
+end
+
+initial begin
+   	rst_n = 1;
+    	#(NCLK) rst_n=0;
+    	#(NCLK) rst_n=1; //复位信号
+
+	repeat(100) @(posedge clk)begin
+
+	end
+	\$display("运行结束！");
+	\$dumpflush;
+	\$finish;
+	\$stop;	
+end 
+endmodule
+EOF
+    echo "info:已生成tb.v文件！"
+    exit 0
+fi
+#--------------------------- verilog模板--------------------------------
+if [ "$1" = "-m" ];then #添加module
+	if [ "x$2" = "x" ];then 
+		echo "error:输入的命令有误，请查看帮助！"
+	else
+		file="$2.v"
+		if [ -f $file ];then
+			echo "error:$file已存在！"
+			exit 1
+		fi
+		dat=$(date +%Y/%m/%d)
+		echo "// ********************************************************************">$file
+		echo "// File name    : $file">>$file
+		echo "// Module name  : $2">>$file
+		echo "// Author       : hpy">>$file
+		echo "// Description  : ">>$file
+		echo "// Date         : $dat">>$file
+		echo "// --------------------------------------------------------------------">>$file
+
+		echo "module $2(" >> $file
+		echo "	input clk,">>$file
+		echo "	input rst_n_n">>$file
+		echo ");">>$file
+		echo  "">>$file
+		echo "always@(posedge clk or negedge rst_n_n)">>$file
+		echo "begin">>$file
+		echo "	if(!rst_n_n)begin">>$file
+		echo "">>$file
+		echo "	end">>$file
+		echo "	else begin">>$file
+		echo "">>$file
+		echo "	end">>$file
+		echo "end">>$file
+		echo -e "\nendmodule\n">>$file
+		echo "info:$file生成成功！"
+	fi
+
+	exit 0
+fi
+#--------------------------------时钟分频------------------------------------
+if [ "$1" = "-clk" ];then
+	if [ -f divide.v ];then
+		echo "info:生成失败！已存在文件 divide.v !"
+		exit 1
+	fi
+cat<<EOF >divide.v
+\`timescale 1ns / 1ps
+// ********************************************************************
+//	FileName	: divide.v
+//	Author		：hpy
+//	Email		：yuan_hp@qq.com
+//	Date		：2020年06月18日
+//	Description	：任意整数时钟分频
+// --------------------------------------------------------------------
+module divide#(
+	parameter WIDTH = 3,  //计数器的位数，计数的最大值为 2**WIDTH-1
+	parameter N  = 3  //分频系数，请确保 N < 2**WIDTH-1，否则计数会溢出
+) (	
+	input clk,
+	input rst_n_n,
+	output clkout
+);
+  
+	reg 	[WIDTH-1:0]	cnt_p,cnt_n;     //cnt_p为上升沿触发时的计数器，cnt_n为下降沿触发时的计数器
+	reg			clk_p,clk_n;     //clk_p为上升沿触发时分频时钟，clk_n为下降沿触发时分频时钟
+ 
+	//上升沿触发时计数器的控制
+	always @ (posedge clk or negedge rst_n_n )         //posedge和negedge是verilog表示信号上升沿和下降沿
+                                                         //当clk上升沿来临或者rst_n_n变低的时候执行一次always里的语句
+		begin
+			if(!rst_n_n)
+				cnt_p<=0;
+			else if (cnt_p==(N-1))
+				cnt_p<=0;
+			else cnt_p<=cnt_p+1;             //计数器一直计数，当计数到N-1的时候清零，这是一个模N的计数器
+		end
+ 
+         //上升沿触发的分频时钟输出,如果N为奇数得到的时钟占空比不是50%；如果N为偶数得到的时钟占空比为50%
+         always @ (posedge clk or negedge rst_n_n)
+		begin
+			if(!rst_n_n)
+				clk_p<=0;
+			else if (cnt_p<(N>>1))          //N>>1表示右移一位，相当于除以2去掉余数
+				clk_p<=0;
+			else 
+				clk_p<=1;               //得到的分频时钟正周期比负周期多一个clk时钟
+		end
+ 
+        //下降沿触发时计数器的控制        	
+	always @ (negedge clk or negedge rst_n_n)
+		begin
+			if(!rst_n_n)
+				cnt_n<=0;
+			else if (cnt_n==(N-1))
+				cnt_n<=0;
+			else cnt_n<=cnt_n+1;
+		end
+ 
+        //下降沿触发的分频时钟输出，和clk_p相差半个时钟
+	always @ (negedge clk)
+		begin
+			if(!rst_n_n)
+				clk_n<=0;
+			else if (cnt_n<(N>>1))  
+				clk_n<=0;
+			else 
+				clk_n<=1;                //得到的分频时钟正周期比负周期多一个clk时钟
+		end
+ 
+        assign clkout = (N==1)?clk:(N[0])?(clk_p&clk_n):clk_p;      //条件判断表达式
+                                                                    //当N=1时，直接输出clk
+                                                                    //当N为偶数也就是N的最低位为0，N（0）=0，输出clk_p
+                                                                    //当N为奇数也就是N最低位为1，N（0）=1，输出clk_p&clk_n。正周期多所以是相与
+endmodule 
+EOF
+	echo "info:成功生成时钟分频模块 divide.v文件"
+	exit 0
+fi
+# ----------------------- system verilog模板 -----------------------------
+if [ "$1" = "-sm" ];then #添加module
+	if [ "x$2" = "x" ];then 
+		echo "error:输入的命令有误，请查看帮助！"
+	else
+		file="$2.sv"
+		if [ -f $file ];then
+			echo "error:$file已存在！"
+			exit 1
+		fi
+		dat=$(date +%Y/%m/%d)
+		echo "// ********************************************************************">$file
+		echo "// File name    : $file">>$file
+		echo "// Module name  : $2">>$file
+		echo "// Author       : hpy">>$file
+		echo "// Description  : ">>$file
+		echo "// Date         : $dat">>$file
+		echo "// --------------------------------------------------------------------">>$file
+		echo "//type=sv" >> $file
+		echo "//title=demo" >> $file
+		
+		echo "module $2(" >> $file
+		echo ");">>$file
+		echo  "">>$file
+		echo "initial begin" >> $file
+		echo "" >> $file
+		echo "end" >> $file
+		echo "" >> $file
+		echo "endmodule" >> $file
+		echo "info:$file生成成功！"
+	fi
+
+	exit 0
+fi
+
+# ------------------------------ 开始仿真 ------------------------------
+if [ $# -gt 0 ];then
+	if [ "$1" = "-r" ];then
+		echo "开始仿真！"
+	elif [ -f $1 ];then #如果存在这个文件，则对这个文件单独仿真，看看是否有语法错误
+		fname="iv-test"
+		iverilog $1 -o $fname && vvp $fname
+		if [ -f $fname ];then
+			rm $fname
+		else
+			echo "err:$1文件存在语法错误！"
+		fi
+		if [ -f wave.lxt2 ];then
+			rm wave.lxt2
+		fi
+		exit 0
+	else
+		echo "命令有误，输入mvsim -help 显示帮助！"
+		exit 1
+	fi
+fi
+
+if [ ! -d sim ];then
+    mkdir sim 
+fi 
+echo "MVSIM info:当前仿真的工程路径为$dir"
+rm -rf ./sim/*  #清空sim文件夹下的内容
+ctags -R
+src=$(find -name "*.v")
+iverilog  -o sim/wave $src #综合verilog代码
+cd sim
+echo
+echo "<<<<<<<<<< S I M  R E P O R T >>>>>>>>>>"
+vvp -n wave -lxt2  #仿真
+echo "<<<<<<<<<<<<<<<<< E N D >>>>>>>>>>>>>>>>"
+cd ..
+
+if [ "$1" = "-r" ];then #刷新仿真数据
+	echo "info:刷新仿真数据，如若刷新成功请自行打开gtkwave查看波形或者刷新已经打开的本工程gtkwave！"
+	exit 0
+fi
+
+gtkwave sim/wave.lxt2 &> /dev/null & #显示波形
+exit 0
