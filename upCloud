@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
-#UFUNCTION=自动同步当前项目至gitee仓库
+#UFUNCTION=自动同步当前项目至gitee仓库c
 
-#同步到 gitee仓库
 pwd
 git status
 git add .
@@ -10,6 +9,6 @@ if [[ $# -eq 0 ]];then
 else
 	dat=$*
 fi
-git commit -m "$dat"
+git commit -m "$dat"  
 git push gitee master
 
