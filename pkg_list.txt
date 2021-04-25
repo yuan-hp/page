@@ -1,0 +1,1 @@
+deepin/cdd.fish deepin/d/fdf deepin/gitee.fish deepin/github.fish deepin/kancloud.fish deepin/math.ave deepin/math.dft deepin/math.dftp deepin/math.max deepin/math.maxabs deepin/math.min deepin/math.minabs deepin/math.s deepin/math.ss deepin/math.sum deepin/mgo deepin/mvsim deepin/new deepin/readini.fish deepin/sea.fish deepin/topath.fish deepin/web.fish cygwin/apt-cyg
