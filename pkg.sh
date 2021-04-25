@@ -18,8 +18,7 @@ function main(){
             idx=$((idx+1))
         done 
     fi 
-    echo $str 
-    exit 
+
     case $cmd in 
         "install") minstall $str ;
     esac 

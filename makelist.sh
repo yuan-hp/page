@@ -8,4 +8,4 @@
 
 src=$(find deepin cygwin -type f -name "*" -print )
 
-echo $src > pkg_list.txt
+echo $src > pkg.all
