@@ -21,7 +21,7 @@ fi
 if [ "$1" = "-init" ] || [ "$1" = "-i" ];then #生成iverilog testbech模板
 	if [ ! -f run.sh ];then
 		echo "#!/bin/bash" > run.sh
-		echo "clear">>run.sh
+		# echo "clear">>run.sh
 		echo "mvsim \$*" >> run.sh
 		chmod +x run.sh
 		echo "info:已生成run脚本"
