@@ -7,9 +7,12 @@
 #-------------------------------------------------------
  
 url="http://yuan_hp.gitee.io/page"
-bin_path="$HOME/bin"
-fish_path="$HOME/.config/fish/functions"
 
+# bin_path="$HOME/bin"
+# fish_path="$HOME/.config/fish/functions"
+
+bin_path="bin"
+fish_path="functions"
 function main(){
 
     #预处理命令
@@ -29,6 +32,7 @@ function main(){
         "list") mlist ;;  #列出所有资源包
         "find") mfind $str ;; #资源包模糊查找
         "init") minstall_all;; #安装所有脚本
+        "remove")mremove $str ;; #移除安装的脚本
         "help") mhelp ;; #帮助
     esac 
 }
@@ -41,6 +45,7 @@ function mhelp() {
     echo "pkg mlist           列出所有资源"
     echo "pkg find script     查找资源"
     echo "pkg init            安装所有脚本"
+
     echo "pkg help            显示帮助"
 
     echo 
@@ -204,7 +209,20 @@ function mfind() {
         echo $src | tr [' '] ['\n']| grep $i
     done 
 }
-
-
+#--------------------------------
+#移除指定功能
+#--------------------------------
+function mremove() {
+    for i in $1
+    do 
+        if [ -f $fish_path/$i ] ; then  
+            rm $fish_path/$i && echo " $i is removed!" || "failed!"
+        elif [ -f $bin_path/$i ] ; then 
+             rm $bin_path/$i && echo " $i is removed!" || "failed!"
+        else 
+            echo "You did not install $i"
+        fi 
+    done 
+}
 
 main $*

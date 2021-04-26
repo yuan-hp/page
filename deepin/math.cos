@@ -1,20 +1,28 @@
 #!/usr/bin/env bash
 #-------------------------------------------------------
-#	FileName	: math.c.sh
+#	FileName	: math.cos.sh
 #	Author		：hpy
 #	Date		：2021年04月25日
-#	Description	：复合计算器
+#	Description	：余弦函数
 #-------------------------------------------------------
-#UFUNCTION=复合计算器
+#UFUNCTION=余弦函数
 
-scale=10  #精度
-cmd="math.c"
+scale=5  #精度
+cmd="math.cos"
 function main(){
+    if [ $# -eq 2 ] ; then
+        if [ $(IsNumber $2) -eq 0 ] && [ $2 -gt 0 ] ; then 
+            scale=$2
+        else 
+            err
+        fi 
+    fi
 
-    if [ $1 == "-h" ] ; then 
+    if [ $# -gt 0 ] && [ $# -lt 3 ] ; then
+        mcos $1
+    else 
         err
-    fi 
-    mall $*
+    fi    
 
 }
 
@@ -39,8 +47,8 @@ function IsNumber() {
 #------------------
 #cos
 #------------------
-function mall(){
-    echo "scale=$scale;$1" | bc -l
+function mcos(){
+    echo "scale=$scale;c($1)" | bc -l
 }
 
 main $* 
