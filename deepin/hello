@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+#-------------------------------------------------------
+#	FileName	: hello.sh
+#	Author		：hpy
+#	Date		：2020年11月08日
+#	Description	：从网上随机获取一段话并显示
+#------------------------------------------------------- 
+
+#UFUNCTION=从网上随机获取一段话并显示
+function getSentence(){
+    js=`curl -s https://v1.hitokoto.cn/`
+    text=` echo $js | jq '.hitokoto'` #提取
+    text=${text//\"/} #去除引号
+    author=` echo $js | jq '.from'` #提取
+    author=${author//\"/} #去除引号
+    text="${text}  ---[$author]"
+    echo "$text"  
+}
+
+getSentence
+
+
