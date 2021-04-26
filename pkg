@@ -8,11 +8,11 @@
  
 url="http://yuan_hp.gitee.io/page"
 
-# bin_path="$HOME/bin"
-# fish_path="$HOME/.config/fish/functions"
+bin_path="$HOME/bin"
+fish_path="$HOME/.config/fish/functions"
 
-bin_path="bin"
-fish_path="functions"
+# bin_path="bin"
+# fish_path="functions"
 function main(){
 
     #预处理命令
