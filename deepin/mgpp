@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+#-------------------------------------------------------
+#	FileName	: mgpp.sh
+#	Author		：hpy
+#	Date		：2021年04月26日
+#	Description	：配置g++版本
+#-------------------------------------------------------
+
+#UFUNCTION=配置g++版本
+sudo update-alternatives --config g++

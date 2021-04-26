@@ -25,6 +25,7 @@ function ReadFileType(){
         *.go ) go build -o $dst $1 && chmod +x $dst &&  ./$dst ;;
         *.plt) gnuplot $1 ;;   #gnuplot
 		*.m) dst=$(basename $1) && dst=${dst%%.*}&& matlab -nosplash -nodesktop -r $dst ;;  #matlab文件
+		*.dot | *.gv ) dot -Tpng -o t.png $1 ;; #dot gv文件
         * ) echo "Fuck! I don't konw what it is!" ;;
     esac
 

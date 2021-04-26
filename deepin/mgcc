@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+#-------------------------------------------------------
+#	FileName	: mgcc.sh
+#	Author		：hpy
+#	Date		：2021年04月26日
+#	Description	：配置gcc版本
+#-------------------------------------------------------
+
+#UFUNCTION=配置gcc版本
+sudo update-alternatives --config gcc
