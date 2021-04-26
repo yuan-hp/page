@@ -151,7 +151,7 @@ function minstall_all(){
 function sys_check(){
     case $(uname -s | tr [A-Z] [a-z]) in 
         *cygwin*) echo "cygwin" ;;
-        *linux*) echo "linux" ;;
+        *) echo "linux" ;;
     esac 
 }
 
