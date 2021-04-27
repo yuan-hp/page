@@ -31,6 +31,7 @@ pkg help            显示帮助
 
 ```shell
 curl http://yuan_hp.gitee.io/page/pkg > ~/bin/pkg 
+chmod +x ~/bin/pkg
 ```
 
 # 主要依赖软件
