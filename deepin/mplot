@@ -115,7 +115,8 @@ function mplot() {
     #echo "pause -1" >> $plt
     cd $(dirname $plt)
     chmod +x $plt 
-    fish -c "open $plt "
+    #fish -c "open $plt "
+	gnuplot -c $plt 
 }
 
 main $* 
