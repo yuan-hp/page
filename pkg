@@ -45,7 +45,7 @@ function mhelp() {
     echo " Install script!"
     echo "pkg install script  安装script"
     echo "pkg linstall script 安装script到当前目录"
-    echo "pkg mlist           列出所有资源"
+    echo "pkg list           列出所有资源"
     echo "pkg find script     查找资源"
     echo "pkg init            安装所有脚本"
 
