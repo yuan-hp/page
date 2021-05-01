@@ -106,17 +106,16 @@ function mmplot() {
     echo "set grid  #设置网格" >> $plt 
     echo "set xlabel \"x\"" >> $plt
     echo "set ylabel \"y\"" >> $plt
-    echo "set ylabel \"y\"" >> $plt
     if [[ $smooth == "true" ]] ;then 
         echo "plot \"$(basename $1)\" u $2 smooth bezier t \"\"" >> $plt
     else 
         echo "plot \"$(basename $1)\" u $2 w l t \"\"" >> $plt
     fi 
-    #echo "pause -1" >> $plt
+    echo "pause -1" >> $plt
     cd $(dirname $plt)
     chmod +x $plt 
-    fish -c "open $plt "
-	#gnuplot -c $plt 
+    #fish -c "open $plt "
+	gnuplot -c $(basename $plt) & 
 }
 
 main $* 

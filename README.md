@@ -80,5 +80,8 @@ chmod +x ~/bin/pkg
 | [mgpp](./deepin/mgpp)                 | g++版本管理                                                  | -                      |
 | [mgcc](./deepin/mgcc)                 | gcc版本管理                                                  | -                      |
 | [mfit](./deepin/mfit)                 | 最小二乘法拟合文件，Use: mfit filename , 数据1 2列 => x y    | -                      |
-| [icheck](./deepin/icheck)             | iverilog实时检测语法                                        | -                      |
+| [icheck](./deepin/icheck)             | iverilog实时检测语法                                         | -                      |
+| [mkcd](./deepin/mkcd)                 | 创建文件夹并切换到这个路径去                                 | -                      |
+
+
 
