@@ -30,11 +30,11 @@ function main(){
             var="$(</dev/stdin)"
             echo "$var" > $datasrc
             filename=$datasrc
-            mplot $filename $dataselect
+            mmplot $filename $dataselect
         else 
             if [ -f $1 ] ; then 
                 filename=$1
-                mplot $filename $dataselect
+                mmplot $filename $dataselect
             else 
                 err
             fi 
@@ -43,7 +43,7 @@ function main(){
         var="$(</dev/stdin)"
         echo "$var" > $datasrc
         filename=$datasrc
-        mplot $datasrc $dataselect
+        mmplot $datasrc $dataselect
        
     fi 
 
@@ -99,7 +99,7 @@ function AutoKill(){
 #------------------
 #
 #------------------
-function mplot() {
+function mmplot() {
     test ! -f $1 && echo "There is no $1 file!" && exit 2 
     AutoKill gnuplot  #首先关闭已经开启的gnuplot进程
     echo "#!/usr/bin/env gnuplot" > $plt 
@@ -115,8 +115,8 @@ function mplot() {
     #echo "pause -1" >> $plt
     cd $(dirname $plt)
     chmod +x $plt 
-    #fish -c "open $plt "
-	gnuplot -c $plt 
+    fish -c "open $plt "
+	#gnuplot -c $plt 
 }
 
 main $* 

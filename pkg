@@ -193,11 +193,24 @@ function exist(){
 function mlist() {
     local src=$(curl $url/pkg.all) #读取资源包
     local idx=0
-    for i in $src 
+    # for i in $src 
+    # do 
+    #     echo " $idx: $(basename $i)"
+    #     idx=$((idx+1))
+    # done 
+    echo "---------------------------------------"
+    PS3="输入你要安装的脚本序号:"
+    select i in $src exit 
     do 
-        echo " $idx: $i"
-        idx=$((idx+1))
+        if [[ $i == "exit" ]] ; then 
+            exit 0
+        else 
+            echo "install $i"
+            minstall $(basename $i)
+            exit 0
+        fi    
     done 
+
 }
 
 #--------------------------
