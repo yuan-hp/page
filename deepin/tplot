@@ -112,7 +112,7 @@ function src () {
     }
     END{
         range=ymax-ymin
-        if ( range > "'$COLUMNS'") {
+        if ( range > "'$COLUMNS'"-1) {
             for (k in y){
                 print x[k],y[k],int((y[k]-ymin)*("'$COLUMNS'" -20)/range)+2
             }
