@@ -175,7 +175,7 @@ function exist(){
         if [ -f $bin_path/$1 ] ; then 
             read -p "You had install $1! Dou you want to re install $1? y/n :" ans 
             if [[ $ans == "y" ]] ; then 
-                $fish_path/$1
+                rm $bin_path/$1
                 echo 0
                 return 0
             else 

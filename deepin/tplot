@@ -76,7 +76,7 @@ function getMaxLen() {
             maxlen=0
         }
         {
-            if ( $1 ~ /^[-0-9]+$/) {
+            if ( $1 ~ /^[-0-9.]+$/) {
                 maxlen = (length($1) > maxlen) ? length($1) : maxlen
             }
         }

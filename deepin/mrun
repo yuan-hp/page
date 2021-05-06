@@ -1,0 +1,39 @@
+#!/bin/bash
+#UFUNCTION=搜索当前路径中的run文件并执行
+if [ "$1" = "-help" ];then
+	sdir=`dirname $0`
+	echo -e "\033[36m说明:\n脚本路径为:$sdir\033[0m"
+	echo -e "\033[36m本指令将会寻找你当前终端打开的路径中是否存在run/run.sh文件\n若存在,则执行run/run.sh文件\n若不存在则不执行\n注意:指令后跟的参数将会传递给实际调用的脚本\n\033[0m"	
+	exit 0
+fi
+
+dir=`pwd` #获取当前终端的路径
+echo -e "\033[36m当前的工作目录为:$dir\033[0m"
+cd $dir
+
+#优先寻找run文件
+runfile=run
+if test -f $runfile
+then
+	echo -e "\033[36m存在run文件，执行run脚本\033[0m"
+	chmod +x $runfile #添加可执行权限
+	echo -e "--- R E P O R T ---"	
+	./$runfile $*
+	exit 0
+else
+	echo -e "\033[36m不存在$runfile文件，将寻找run.sh文件!\033[0m"
+fi
+
+#寻找run.sh文件
+runfile="run.sh"
+if test -f $runfile
+then
+	echo -e "\033[36m存在$runfile文件，执行$runfile脚本\033[0m"
+	chmod +x $runfile #添加可执行权限
+	echo -e "--- R E P O R T ---"	
+	./$runfile $*
+	exit 0
+else
+	echo -e "\033[36m不存在$runfile文件，操作失败！\n若要执行，请在当前文件夹下建立可以执行的run文件或者run.sh文件!\033[0m"
+	exit 1
+fi
