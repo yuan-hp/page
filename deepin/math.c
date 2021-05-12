@@ -40,7 +40,7 @@ function IsNumber() {
 #cos
 #------------------
 function mall(){
-    echo "scale=$scale;$1" | bc -l
+    echo "scale=$scale;($*)" | bc -l
 }
 
 main $* 
