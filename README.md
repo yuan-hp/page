@@ -82,6 +82,7 @@ chmod +x ~/bin/pkg
 | [mfit](./deepin/mfit)                 | 最小二乘法拟合文件，Use: mfit filename , 数据1 2列 => x y    | -                      |
 | [icheck](./deepin/icheck)             | iverilog实时检测语法                                         | -                      |
 | [mkcd](./deepin/mkcd)                 | 创建文件夹并切换到这个路径去                                 | -                      |
+| [word](./deepin/word)                 | 简易在线有道词典   lg：word hello                            | pkg install word       |
 
 
 
