@@ -43,13 +43,13 @@ function main(){
 #---------------------------------------
 function mhelp() {
     echo " Install script!"
-    echo "pkg install script  安装script"
-    echo "pkg linstall script 安装script到当前目录"
-    echo "pkg list           列出所有资源"
-    echo "pkg find script     查找资源"
-    echo "pkg init            安装所有脚本"
+	echo "$(basename $0) install script  安装script"
+	echo "$(basename $0) linstall script 安装script到当前目录"
+	echo "$(basename $0) list            列出所有资源"
+	echo "$(basename $0) find script     查找资源"
+	echo "$(basename $0) init            安装所有脚本"
 
-    echo "pkg help            显示帮助"
+	echo "$(basename $0) help            显示帮助"
 
     echo 
     
