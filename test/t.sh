@@ -1,64 +1,62 @@
 #!/usr/bin/env bash
-#UFUNCTION=简易在线有道词典
+#-------------------------------------------------------
+#	FileName	: .sh
+#	Author		：hpy
+#	Date		：2021年04月25日
+#	Description	：简单通用绘图
+#-------------------------------------------------------
+#UFUNCTION=一些常用工具的常用指令
 
-
-NC='\033[0m'
-Black='\033[0;30m'
-Red='\033[0;31m'
-Green='\033[0;32m'
-Brown='\033[0;33m'
-Blue='\033[0;34m'
-Purple='\033[0;35m'
-Cyan='\033[0;36m'
-LightGray='\033[0;37m'
-
-function echo_cyan() {
-    echo -e "${Cyan}$@${NC}"
+function main() {
+    case $1 in 
+        git) mgit ;; 
+        df) mdf ;; 
+        *) mhelp ;;
+    esac 
 }
 
-function echo_green() {
-    echo -e "${Green}$@${NC}"
-}
 
 function mhelp() {
-        echo 
-        echo "  简单在线词典"
-        echo "  Usage : $(basename $0) string"
-        echo 
+cat<<EOF
+    How to use !
+    Usage: $(basename $0) [string]
+
+    help        帮助
+    git         显示git常用命令
+    df          磁盘工具命令示例
+EOF
 }
 
-if [[ $1 == "-h" ]] || [[ $1 == "--help" ]] ; then 
-        mhelp
-        exit 
-fi 
 
-if [[ $# -lt 1 ]];then
-    echo_cyan "Usage: dict word"
-    exit 127
-fi
+function mdf() {
+cat<<EOF
+    Example:
+    1.df -hl: 查看磁盘剩余空间
+    2.df -h ：查看每个根路径的分区大小
+EOF
+}
 
-baseurl1='http://fanyi.youdao.com/openapi.do?keyfrom=fanyi-node&key=593554388&type=data&doctype=json&version=1.2'
-baseurl2='http://dict-co.iciba.com/api/dictionary.php?key=D191EBD014295E913574E1EAF8E06666'
+function mgit() {
+cat<<EOF
+    Example:
+    1. git config --global user.name "yhp"
+    2. git config --global user.email "yuan_hp@qq.com"
+    3. git init
+    4. git status
+    5. git add <filename> or git add .
+    6. git commit -m "note"
+    7. git remote add origin https://github.com/yuan-hp/Electron-learn.git
+    8. git push -u origin master
+    9. git push origin master
+    10.git pull origin master
+    11.git config --global core.autocrlf false -> CRLF LF 
+EOF
+}
 
-word=$@
 
-# Youdao dict
-result=$(curl -s --data-urlencode "q=${word}" "$baseurl1")
-phonetic=$(echo $result | jq .basic.phonetic | sed 's/"//g')
-echo
-echo -e " $word 发音：${Purple}[ $phonetic ]${NC}" "~ 有道"
-echo
 
-printf "${Green}"
-echo $result | jq .basic.explains | sed -e 's/"//g' -e '/\[/d' -e '/\]/d' -e 's/^/-/'
-echo -e "${NC}"
-weblength=$(echo $result | jq ".web | length")
 
-for (( i = 0; i < weblength; i++ )); do
-    printf "%d. " $((i+1))
-    echo $result | jq .web | jq .[$i].key | sed 's/"//g'
-    echo_cyan "  " $(echo $result | jq .web | jq .[$i].value | sed '/\]/d;/\[/d' | xargs)
-done
 
-echo
-exit 0
+
+#-------------------------------------
+main $* 
