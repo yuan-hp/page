@@ -8,6 +8,19 @@
 #-----------------------------------------------
 dst=$(date +%Y%m%d%H%M%S.mgo) #临时文件
 
+if [[ "$1" == "-h" ]] || [[ "$1" == "--help" ]] || [[ "$1" == "--help" ]]  ; then 
+cat<<EOF
+	$(basename $0) -v 1.0 
+	Usage: $(basename $0) [filename]
+	$(basename $0)			
+		当前路径下存在run、run.sh或者run.fish则执行，否则寻找最近修改文件所在路径，
+		若存在run、run.sh或者run.fish则执行，否则直接尝试执行最近修改的文件!
+	$(basename $0) filename 
+		尝试执行filename文件
+EOF
+exit 0
+fi 
+
 function main(){
     DefautRun $*
     test ! -f $1 && echo "不存在 $1 文件" | cat && exit
