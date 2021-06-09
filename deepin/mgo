@@ -32,7 +32,7 @@ function main(){
 #带有参数，则识别第一个参数，并根据文件不同类型选择后续操作
 function ReadFileType(){ 
     case $1 in 
-        *.sh | *.fish | *.pl | *.tcl | *.tk | *.py | *.lua | *.awk)  chmod +x $1 && ./$1 ;; 
+        *.sh | *.fish | *.pl | *.tcl | *.tk | *.py | *.lua | *.awk | *.rb)  chmod +x $1 && ./$1 ;; 
 		*.c) gcc -o $dst $1 && chmod +x $dst && ./$dst|cat;;
 		*.cpp)g++ -std=c++11 -o $dst $1 && chmod +x $dst && ./$dst;;
         *.go ) go build -o $dst $1 && chmod +x $dst &&  ./$dst ;;

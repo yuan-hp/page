@@ -48,7 +48,7 @@ function IsNumber() {
 #cos
 #------------------
 function mtan(){
-    echo "scale=$scale;s($1)/c($1)" | bc -l
+    echo "scale=$scale;s($1)/c($1)" | bc -l 
 }
 
 main $* 
