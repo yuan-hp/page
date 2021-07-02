@@ -25,10 +25,44 @@ function DetFileType(){
 			*.fish) 	MakeFishFile $i ;;  
 			*.v) 	    MakeVerilogFile $i ;;
 			*.cpp)		MakeCppFile $i ;;  
+			*.plt)      MakeGnuplotFile $i;; 
 			"*") echo "没有识别文件";;
 		esac 
 	done 
 }
+
+
+#-----------------------------------
+#新建gnuplot的模板文件
+#@param1 文件名称
+#-----------------------------------
+function MakeGnuplotFile(){
+	local fdir=$(dirname $1)
+	test ! -d $fdir && mkdir -p $fdir  #文件夹路径不存在则先新建文件夹
+	echo "#!/usr/bin/env gnuplot" > $1 
+	echo "#-------------------------------------------------------" >> $1
+	echo "#	FileName	: $(basename $1)" >> $1
+	echo "#	Author		：hpy" >> $1
+	echo "#	Date		：$(date +%Y年%m月%d日)" >> $1
+	echo "#	Description	：" >> $1
+	echo "#-------------------------------------------------------" >> $1
+	echo " "  >> $1
+	echo "set grid  #设置网格" >> $1
+	echo "set title \"demo\"" >> $1 
+	echo "set key  box #设置图例" >>$1 
+	echo "#set xrang [0:10]" >> $1 
+	echo "set xlabel \"x\"" >> $1 
+	echo "set ylabel \"y\"">> $1
+	echo "plot \\" >> $1
+    echo "\"m.dat\" u 1 w lp t \"line1\" ,\\" >> $1
+    echo "\"m.dat\" u 2 w lp t \"line2\" " >> $1
+	echo "pause 2 #等待20s " >> $1
+	echo "quit" >> $1
+
+	echo "新建 $1 成功"
+	echo ""
+}
+
 
 #-----------------------------------
 #新建bash的模板文件
