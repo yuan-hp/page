@@ -83,6 +83,22 @@ chmod +x ~/bin/pkg
 | [icheck](./deepin/icheck)             | iverilog实时检测语法                                         | -                      |
 | [mkcd](./deepin/mkcd)                 | 创建文件夹并切换到这个路径去                                 | -                      |
 | [word](./deepin/word)                 | 简易在线有道词典   lg：word hello                            | pkg install word       |
+| [hp](./deepin/hp)                     | 一些基本命令记录，例如 git、内存查看                         | pkg install hp         |
+|                                       |                                                              |                        |
+|                                       |                                                              |                        |
+|                                       |                                                              |                        |
+|                                       |                                                              |                        |
+|                                       |                                                              |                        |
+|                                       |                                                              |                        |
+|                                       |                                                              |                        |
+|                                       |                                                              |                        |
+|                                       |                                                              |                        |
+|                                       |                                                              |                        |
+|                                       |                                                              |                        |
+|                                       |                                                              |                        |
+|                                       |                                                              |                        |
+|                                       |                                                              |                        |
+|                                       |                                                              |                        |
 
 
 
