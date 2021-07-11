@@ -16,6 +16,9 @@ main(){
         elif [[ $1 == "push" ]] ; then  # 同步修改后的数据
             cd ..
             ./upCloud
+        elif [[ $1 == "pull" ]] ; then  # 拉取仓库数据到本地
+            cd ..
+            git pull 
         else 
             cd $root
             dis
