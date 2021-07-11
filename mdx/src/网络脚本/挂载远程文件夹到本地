@@ -1,0 +1,16 @@
+    我们想讲服务器的文件夹挂载到本地，使得之后操作服务器文件件中的内容时就像操作自己电脑上的文件，这样会很方便。
+    远程连接我们使用ssh，语法为
+    
+    ssh 用户名@远程电脑的ip地址
+    如：ssh root@192.168.23.46
+    成功连上后输入密码即可
+    
+    当我们想直接挂在远程文件夹时，我们可以使用sshfs来实现，我们必须两台电脑都配置sshfs，deepin可以使用
+    
+    sudo apt-get install sshfs
+    
+    进行安装。
+    假设我们远程服务器(电脑)文件夹/root/work_space想要挂在到本地电脑的/home/yhp/hw_work_space文件夹，我们可以使用命令
+    
+    sshfs 用户名@服务器ip：服务器目录  本地目录
+    如 sshfs root@192.168.23.46:/root/work_space /home/yhp/hw_work_space

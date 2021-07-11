@@ -1,0 +1,2 @@
+    s="yhp as kkk\ner d fggg"
+    echo -e $s | column -s \  -t
