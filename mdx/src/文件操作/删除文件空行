@@ -1,0 +1,5 @@
+ 	方法1：grep -v '^$' 1.txt
+	方法2：sed '/^$/d' 1.txt 
+	方法3：awk '!/^$/' 1.txt 
+	方法4：cat 1.txt | tr -s '\n'
+

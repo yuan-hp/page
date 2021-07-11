@@ -1,0 +1,4 @@
+    方法1：head -100 data.txt | tail -1          //查看data.txt文件的第100行
+    方法2：nl data.txt | sed -n '100p'             //查看data.txt文件的第100行
+    方法3：sed -n '100p' data.txt                  //查看data.txt文件的第100行
+    方法4：awk 'NR==100' data.txt               //查看data.txt文件的第100行

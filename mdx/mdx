@@ -7,24 +7,22 @@
 #-------------------------------------------------------
 #UFUNCTION=一些常用工具的常用指令
 
-root="./dir"
-
+cd $(dirname $0)
+root="./src"
 main(){
-    echo $* 
     if [ -d $root ] ; then 
         if [[ $1 == "add" ]] ; then # 添加内容
             fish -c "open $root > /dev/null ^ /dev/null &"
         elif [[ $1 == "push" ]] ; then  # 同步修改后的数据
             cd ..
             ./upCloud
-            echo hhhh
         else 
             cd $root
             dis
         fi 
     else 
         echo "不存在路径$root "
-    fi  
+    fi   
 }
 
 function dis() {
