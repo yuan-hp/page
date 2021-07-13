@@ -9,6 +9,7 @@
 
 cd $(dirname $0)
 root="./src"
+backflag=0
 main(){
     if [[ $1 == "-h" ]] || [[ $1 == "-help" ]] ; then 
 cat<<EOF
@@ -42,10 +43,14 @@ EOF
 
 function dis() {
     PS3="按提示输入序号："
-    select i in $(ls) quit 
+    select i in $(ls) quit .. 
     do 
         if [[ $i == "quit" ]] ; then 
             exit 0 
+		elif [[ $i == ".." ]] ; then 
+			cd ..
+			clear 
+			dis 
         elif [ -d $i ] ; then 
             clear  
             cd $i
