@@ -10,6 +10,18 @@
 cd $(dirname $0)
 root="./src"
 main(){
+    if [[ $1 == "-h" ]] || [[ $1 == "-help" ]] ; then 
+cat<<EOF
+    Usage: mdx [option]
+    mdx             搜索
+    mdx add         添加新的内容说明
+    mdx push        将更新后的数据同步到云端
+    mdx pull        拉取云端最新资源到本地
+
+EOF
+    exit 0
+    fi 
+
     if [ -d $root ] ; then 
         if [[ $1 == "add" ]] ; then # 添加内容
             fish -c "open $root > /dev/null ^ /dev/null &"

@@ -1,0 +1,5 @@
+    PS3="You should select one:"
+    select i in $(ls) quit
+    do 
+        echo $i  
+    done 

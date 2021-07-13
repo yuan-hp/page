@@ -1,0 +1,4 @@
+    dd if=/dev/zero of=t.txt bs=1M count=50 
+
+    wc -c t.txt  #获取文件大小
+    rm t.txt 

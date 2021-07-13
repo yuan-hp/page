@@ -1,0 +1,5 @@
+
+
+
+    str="AB,cdeF"
+    echo $str | tr -d ",AB"  #删除字符 ，AB  ==> cdeF
