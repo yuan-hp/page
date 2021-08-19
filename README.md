@@ -85,7 +85,7 @@ chmod +x ~/bin/pkg
 | [word](./deepin/word)                 | 简易在线有道词典   lg：word hello                            | pkg install word       |
 | [hp](./deepin/hp)                     | 一些基本命令记录，例如 git、内存查看                         | pkg install hp         |
 | **mdx**                               | **主要记录一些linux常用操作的命令，不支持pkg安装，只能克隆项目后使用。如 mdx add 用于添加说明 ，mdx push将添加后的项目同步到仓库，mdx pull将仓库中的数据同步到本地** |                        |
-|                                       |                                                              |                        |
+| [mcat](./deepin/mcat)                 | 自动将文件编码转为UTF8后输出显示                             | pkg install mcat       |
 |                                       |                                                              |                        |
 |                                       |                                                              |                        |
 |                                       |                                                              |                        |
