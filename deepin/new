@@ -26,6 +26,8 @@ function DetFileType(){
 			*.v) 	    MakeVerilogFile $i ;;
 			*.cpp)		MakeCppFile $i ;;  
 			*.plt)      MakeGnuplotFile $i;; 
+			*.awk)      MakeAwkFile $i ;; 
+			*.py)       MakePythonFile $i ;; 
 			"*") echo "没有识别文件";;
 		esac 
 	done 
@@ -121,6 +123,46 @@ function MakeFishFile(){
 	echo "新建 $1 成功"
 	echo ""
 }
+
+#-----------------------------------
+#新建AWK的模板文件
+#@param1 文件名称
+#-----------------------------------
+function MakeAwkFile(){
+	local fdir=$(dirname $1)
+	test ! -d $fdir && mkdir -p $fdir  #文件夹路径不存在则先新建文件夹
+	echo "#!/usr/bin/awk -f" > $1 
+	echo "#-------------------------------------------------------" >> $1
+	echo "#	FileName	: $(basename $1)" >> $1
+	echo "#	Author		：hpy" >> $1
+	echo "#	Date		：$(date +%Y年%m月%d日)" >> $1
+	echo "#	Description	：" >> $1
+	echo "#-------------------------------------------------------" >> $1
+	echo " "  >> $1
+	echo "新建 $1 成功"
+	echo ""
+}
+
+#-----------------------------------
+#新建Python的模板文件
+#@param1 文件名称
+#-----------------------------------
+function MakePythonFile(){
+	local fdir=$(dirname $1)
+	test ! -d $fdir && mkdir -p $fdir  #文件夹路径不存在则先新建文件夹
+	echo "#!/usr/bin/env python3" > $1 
+	echo "# -*- coding: utf-8 -*-" > $1 
+	echo "#-------------------------------------------------------" >> $1
+	echo "#	FileName	: $(basename $1)" >> $1
+	echo "#	Author		：hpy" >> $1
+	echo "#	Date		：$(date +%Y年%m月%d日)" >> $1
+	echo "#	Description	：" >> $1
+	echo "#-------------------------------------------------------" >> $1
+	echo " "  >> $1
+	echo "新建 $1 成功"
+	echo ""
+}
+
 #-----------------------------------
 #新建 verilog 的模板文件
 #@param1 文件名称
