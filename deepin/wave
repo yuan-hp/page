@@ -226,17 +226,17 @@ function loadColumnAll(){
 			if(c[i])
 				c[i]=c[i]""$i
 			else 
-				c[i]=$i
+				c[i]=""$i
 		}
 	}
 	END {
 		for(out in c){
-			print c[out]
+			printf("%s\n",c[out])
 		}
 	}
 	' > wave_tmp_buf_yhp.wave 
 	loadLineAll wave_tmp_buf_yhp.wave 
-	#rm wave_tmp_buf_yhp.wave 
+	rm wave_tmp_buf_yhp.wave 
 }
 
 
