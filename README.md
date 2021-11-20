@@ -87,7 +87,7 @@ chmod +x ~/bin/pkg
 | **mdx**                               | **主要记录一些linux常用操作的命令，不支持pkg安装，只能克隆项目后使用。如 mdx add 用于添加说明 ，mdx push将添加后的项目同步到仓库，mdx pull将仓库中的数据同步到本地** |                        |
 | [mcat](./deepin/mcat)                 | 自动将文件编码转为UTF8后输出显示                             | pkg install mcat       |
 | [msys](./cygwin/msys)                 | 检测系统是cygwin还是linux                                    | pkg install msys       |
-|                                       |                                                              |                        |
+| [gtm](./deepin/gtm)                   | 获取文件指定标记间的内容                                     | pkg install gtm        |
 |                                       |                                                              |                        |
 |                                       |                                                              |                        |
 |                                       |                                                              |                        |
