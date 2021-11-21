@@ -88,7 +88,7 @@ chmod +x ~/bin/pkg
 | [mcat](./deepin/mcat)                 | 自动将文件编码转为UTF8后输出显示                             | pkg install mcat       |
 | [msys](./cygwin/msys)                 | 检测系统是cygwin还是linux                                    | pkg install msys       |
 | [gtm](./deepin/gtm)                   | 获取文件指定标记间的内容                                     | pkg install gtm        |
-|                                       |                                                              |                        |
+| [gplt](./deepin/gplt)                 | 调用gnuplot从文件中按列取数据画图                            | pkg install gplt       |
 |                                       |                                                              |                        |
 |                                       |                                                              |                        |
 |                                       |                                                              |                        |
