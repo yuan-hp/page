@@ -12,7 +12,7 @@ function mhelp() {
 Version: gplt 1.0
 NOTE:调用gnuplot从文件中按列取数据画图  
 Usage: `basename $0` [option] 
-    -p [f1,l1,x1,y1:f2,l2,x2,y2;...] 指明作图数据来源和线名称,以及使用哪几列作为x,y,冒号分割数据组
+    -p [f1,l1,x1,y1:f2,l2,x2,y2;...] 指明作图数据来源和线名称,以及使用哪几列作为x,y,冒号分割数据组,当x<=0时,x取整数递增序列
     -t string                        作图的标题
     -x string                        x轴显示内容 
     -y string                        x轴显示内容 
@@ -96,9 +96,17 @@ function useGnuplotPlot() {
             y=${t[3]} ;       test -z $y && mhelp return 2
 
             if [ $i -eq $line_max_1 ] ; then 
-                echo "    \"$file_dir\" u $x:$y smooth bezier t \"$title\"" >> $plt
+                if [ -z $x ] ; then 
+                    echo "    \"$file_dir\" u $y smooth bezier t \"$title\"" >> $plt
+                else 
+                    echo "    \"$file_dir\" u $x:$y smooth bezier t \"$title\"" >> $plt
+                fi
             else
-                echo "    \"$file_dir\" u $x:$y smooth bezier t \"$title\",\\" >> $plt
+                if [ -z $x ] ; then 
+                    echo "    \"$file_dir\" u $y smooth bezier t \"$title\",\\" >> $plt
+                else 
+                    echo "    \"$file_dir\" u $x:$y smooth bezier t \"$title\",\\" >> $plt
+                fi 
             fi 
         done 
     else 
@@ -117,9 +125,17 @@ function useGnuplotPlot() {
             y=${t[3]} ;       test -z $y && mhelp return 2
 
             if [ $i -eq $line_max_1 ] ; then 
-                echo "    \"$file_dir\" u $x:$y w l t \"$title\"" >> $plt
+                if [ $x -le 0 ] ; then 
+                    echo "    \"$file_dir\" u $y w l t \"$title\"" >> $plt
+                else 
+                    echo "    \"$file_dir\" u $x:$y w l t \"$title\"" >> $plt
+                fi 
             else
-                echo "    \"$file_dir\" u $x:$y w l t \"$title\",\\" >> $plt
+                if [ $x -le 0 ] ; then 
+                    echo "    \"$file_dir\" u $y w l t \"$title\",\\" >> $plt
+                else 
+                    echo "    \"$file_dir\" u $x:$y w l t \"$title\",\\" >> $plt
+                fi 
             fi 
         done 
     fi 
