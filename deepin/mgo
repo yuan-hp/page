@@ -6,6 +6,7 @@
 # auto run some file! for example bash,fish,tcl,
 # python, cpp, gnuplot and so on 
 #-----------------------------------------------
+#UFUNCTION=自动搜索执行脚本
 dst=$(date +%Y%m%d%H%M%S.mgo) #临时文件
 
 if [[ "$1" == "-h" ]] || [[ "$1" == "--help" ]] || [[ "$1" == "-help" ]]  ; then 
