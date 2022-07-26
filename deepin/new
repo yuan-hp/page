@@ -170,16 +170,17 @@ function MakePythonFile(){
 function MakeVerilogFile(){
 	local fdir=$(dirname $1)
 	test ! -d $fdir && mkdir -p $fdir  #文件夹路径不存在则先新建文件夹
-
+	mname=$(basename $1)
+	mname=$(echo $mname | cut -d . -f1)
 	echo "\`timescale 1ns / 1ps"> $1
-	echo "// ********************************************************************" >> $1
-	echo "//      FileName        : $(basename $1)" >> $1
-	echo "//      Author          ：hpy" >> $1
-	echo "//      Email           ：yuan_hp@qq.com" >> $1
-	echo "//      Date            ：$(date +%Y年%m月%d日)" >> $1
-	echo "//      Description     ：" >> $1
-	echo "// --------------------------------------------------------------------" >> $1
-	echo "module t(" >> $1
+	echo "/*--------------------------------------------------------------------*\\" >> $1
+	echo "FileName        : $(basename $1)" >> $1
+	echo "Author          ：hpy" >> $1
+	echo "Email           ：yuan_hp@qq.com" >> $1
+	echo "Date            ：$(date +%Y年%m月%d日)" >> $1
+	echo "Description     ：" >> $1
+	echo "\\*--------------------------------------------------------------------*/" >> $1
+	echo "module $mname (" >> $1
 	echo "        input clk," >> $1
 	echo "        input rst_n" >> $1
 	echo ");" >> $1
