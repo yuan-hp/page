@@ -13,5 +13,5 @@ else
 	dat=$*
 fi
 git commit -m "$dat"  
-git push gitee master
+git push
 
