@@ -5,7 +5,7 @@
 #	Date		：2021年04月25日
 #	Description	：个人脚本安装
 #-------------------------------------------------------
- 
+#UFUNCTION=自用脚本安装工具
 url="http://yuan_hp.gitee.io/page"
 
 bin_path="$HOME/bin"

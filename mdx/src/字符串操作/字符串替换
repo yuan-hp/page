@@ -1,0 +1,2 @@
+
+    echo "yhp" | tr -s "yhp" "mdx"   #使用mdx替换yhp，按字符对应进行替换

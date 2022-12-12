@@ -1,0 +1,24 @@
+#!/usr/bin/env bash
+#-------------------------------------------------------
+#	FileName	: ghelp
+#	Author		：hpy
+#	Date		：2021年12月06日
+#	Description	：
+#-------------------------------------------------------
+sdir=$(dirname $0)  ; # 脚本所在路径
+
+function ghelp() {
+    cd $sdir
+    for i in $(ls) ; do 
+        if [ -f $i ] ; then 
+            if [[ $i == $(basename $0) ]] ; then continue ; fi 
+            ds=$(cat $i | awk -F= '/#UFUNCTION/{print $2}')
+            test  -z $ds && ds=$(cat $i | awk -F: '/NOTE/{print $2}')
+            echo "|$i%|$ds%|" 
+        fi 
+    done 
+    echo 
+}
+
+echo "--------------- 支持的指令概况 --------------"
+ghelp | column -s % -t  

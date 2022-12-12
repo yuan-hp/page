@@ -1,0 +1,4 @@
+    方法1：grep -n "" t.txt |cut -d':' -f1 | tail -1
+    方法2：awk 'END{print NR}' t.txt 
+    方法3：sed -n '$=' t.txt
+    方法4：wc -l t.txt  //根据换行符号识别

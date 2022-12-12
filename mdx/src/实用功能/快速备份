@@ -1,0 +1,3 @@
+    test -f $0.bak && rm $0.bak
+    sleep 1
+    cp $0{,.bak}

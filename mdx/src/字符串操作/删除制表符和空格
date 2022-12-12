@@ -1,0 +1,1 @@
+    echo "A     bb cdf" | tr -d "\t\ "  #删除制表符和空格

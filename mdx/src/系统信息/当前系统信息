@@ -1,0 +1,21 @@
+    sys=$(uname -s | tr [:upper:] [:lower:])
+
+    if [[ "$sys" =~ "cygwin" ]] ;then 
+        echo "cygwin"
+    elif [[ "$sys" =~ "linux" ]] ;then    
+        echo "linux"
+    fi 
+
+
+
+    echo "----电脑类型------"
+    uname -m   #x86_64
+
+    echo "----操作系统发行版本------"
+    uname -r   
+
+    echo "----操作系统名称------"
+    uname -s   
+
+    echo "----操作系统版本------"
+    uname -v

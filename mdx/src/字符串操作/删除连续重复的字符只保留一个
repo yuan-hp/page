@@ -1,0 +1,1 @@
+    echo "aaabbcccddd" | tr -s [a-zA-Z]  #删除连续的字符，只保留一个

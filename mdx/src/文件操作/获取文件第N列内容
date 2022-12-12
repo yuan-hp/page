@@ -1,0 +1,2 @@
+    方法1：cat t.txt | awk '{print $1}'  //获取第1列，空格分割
+    方法2：cat t.txt | awk -F, '{print $1}' //指定分割符号

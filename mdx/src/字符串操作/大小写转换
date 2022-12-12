@@ -1,0 +1,7 @@
+    str="AB,cdeF"
+
+    echo $str 
+
+    echo $str | tr [:upper:] [:lower:]  #大写字母转小写字母
+    echo $str | tr A-Z a-z  #大写字母转小写字母
+    echo $str | tr a-z A-Z   #小写字母转大写字母

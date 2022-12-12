@@ -1,0 +1,30 @@
+
+    function getArgs(){
+        while getopts 'd:Dm:f:t:' OPT;do
+            case $OPT in
+                d)
+                    para_d="$OPTARG" ;;
+                D)
+                    para_D="yes";;
+                f)
+                    para_f="$OPTARG";;
+                m)
+                    para_m="$OPTARG";;
+                t)
+                    para_t="$OPTARG";;
+                ?)
+                    echo "Usage:`basename $0` [option] filename"
+            esac
+        done
+
+        shift $((OPTIND-1)) #移除已经解析的参数
+        echo "para_d=$para_d"
+        echo "para_D=$para_D"
+        echo "para_f=$para_f"
+        echo "para_m=$para_m"
+        echo "para_t=$para_t"
+
+        echo "其他参数:$*"
+    }
+
+    getArgs -d ind 

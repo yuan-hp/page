@@ -1,0 +1,31 @@
+    #!/bin/bash
+    #1 判断输入是否为数字
+    
+    read -p "输入字符:" in
+    if [ -z $in ];then #当没有输入时直接退出
+        exit 0
+    fi
+    
+    #2 判断输入是否为数字
+    expr $in "+" 10 &> /dev/null
+    if [ $? -ne 0 ];then
+    	echo "输入的不是数字"
+    else 
+    	echo "是数字"
+    fi
+    
+    exit 0
+
+
+    函数版本　：
+    ##返回0 是数字
+    ##返回1 不是数字 
+    isNumber(){
+    	y=$(echo "$1" | sed 's/[0-9]//g')
+    	if [ -z "$y" ];then
+    		echo 0 #不是数字 
+    	else
+    		echo 1 #"不是数字"
+    	fi
+    }
+    

@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+#-------------------------------------------------------
+#	FileName	: msys.sh
+#	Author		：hpy
+#	Date		：2021年10月05日
+#	Description	：
+#-------------------------------------------------------
+ 
+function msysL () {
+    local sys=$(uname -s | tr '[A-Z]' '[a-z]')
+    if [[ $sys == *'cygwin'* ]] ; then 
+        echo "cygwin"
+    else 
+        echo "linux"
+    fi
+}
+
+msysL 

@@ -1,0 +1,2 @@
+
+    cat /proc/cpuinfo |grep vendor_id|awk  -F":" '{print $2}'|tail -1

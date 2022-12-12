@@ -1,0 +1,16 @@
+    $a=hack.func.book.txt
+    #提取文件名一
+    $echo ${a%.*}     
+    hack.func.book
+     
+    #提取文件名二
+    $echo ${a%%.*}
+    hack
+     
+    #提取扩展名一 
+    $echo ${a#(*.)} 
+    func.book.txt
+     
+    #提取扩展名二 
+    $echo ${a##*.}    
+    txt
