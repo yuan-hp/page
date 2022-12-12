@@ -3,15 +3,15 @@
 #	FileName	: run.sh
 #	Author		：hpy
 #	Date		：2022年12月12日
-#	Description	：cygwin下查询exe的dll依赖并将所有依赖拷贝
-#       到当前路径下
+#	Description	：
 #-------------------------------------------------------
 
-ldd $1 > dll.txt 
 
-dll=$(cat dll.txt  | awk '{print $3}')
+#ldd $1 > dll.txt 
 
-for i in $dll 
+#dll=$(cat dll.txt  | awk '{print $3}')
+
+for i in $(ldd $1 | awk '{print $3}') 
 do 
     dll_c=${i##*/}
     cp $i $dll_c  
