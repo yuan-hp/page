@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+#-------------------------------------------------------
+#	FileName	: run.sh
+#	Author		：hpy
+#	Date		：2022年12月12日
+#	Description	：
+#-------------------------------------------------------
+
+
+ldd $1 > dll.txt 
+
+dll=$(cat dll.txt  | awk '{print $3}')
+
+for i in $dll 
+do 
+    dll_c=${i##*/}
+    cp $i $dll_c  
+done 
+
