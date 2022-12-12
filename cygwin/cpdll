@@ -3,9 +3,9 @@
 #	FileName	: run.sh
 #	Author		：hpy
 #	Date		：2022年12月12日
-#	Description	：
+#	Description	：cygwin下查询exe的dll依赖并将所有依赖拷贝
+#       到当前路径下
 #-------------------------------------------------------
-
 
 ldd $1 > dll.txt 
 

@@ -89,7 +89,7 @@ chmod +x ~/bin/pkg
 | [msys](./cygwin/msys)                 | 检测系统是cygwin还是linux                                    | pkg install msys       |
 | [gtm](./deepin/gtm)                   | 获取文件指定标记间的内容                                     | pkg install gtm        |
 | [gplt](./deepin/gplt)                 | 调用gnuplot从文件中按列取数据画图                            | pkg install gplt       |
-|                                       |                                                              |                        |
+| [cpdll](./cygwin/cpdll)               | cygwin下查找exe的依赖dll并将dll拷贝到当前文件夹               |                        |
 |                                       |                                                              |                        |
 |                                       |                                                              |                        |
 |                                       |                                                              |                        |
