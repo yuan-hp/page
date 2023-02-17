@@ -12,6 +12,8 @@ function msysL () {
 		echo "wsl"
     elif [[ $sys == *'cygwin'* ]] ; then 
         echo "cygwin"
+    elif [[ $sys == *'mingw'* ]] ; then 
+        echo "mingw"
     else 
         echo "linux"
     fi
