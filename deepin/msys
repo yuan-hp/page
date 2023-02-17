@@ -7,8 +7,10 @@
 #-------------------------------------------------------
  
 function msysL () {
-    local sys=$(uname -s | tr '[A-Z]' '[a-z]')
-    if [[ $sys == *'cygwin'* ]] ; then 
+    local sys=$(uname -rs | tr '[A-Z]' '[a-z]')
+	if [[ $sys == *'wsl'* ]] ; then 
+		echo "wsl"
+    elif [[ $sys == *'cygwin'* ]] ; then 
         echo "cygwin"
     else 
         echo "linux"
