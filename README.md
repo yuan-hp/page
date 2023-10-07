@@ -30,7 +30,7 @@ pkg help            显示帮助
 使用以下命令安装 **pkg**
 
 ```shell
-curl http://yuan_hp.gitee.io/page/pkg > ~/bin/pkg 
+curl https://gitee.com/yuan_hp/page/raw/master/pkg > ~/bin/pkg 
 chmod +x ~/bin/pkg
 ```
 

@@ -25,14 +25,33 @@ function DetFileType(){
 			*.fish) 	MakeFishFile $i ;;  
 			*.v) 	    MakeVerilogFile $i ;;
 			*.cpp)		MakeCppFile $i ;;  
+			*.c)        MakeCFile $1 ;;
+			*.h)        MakeHFile $1 ;;
 			*.plt)      MakeGnuplotFile $i;; 
 			*.awk)      MakeAwkFile $i ;; 
-			*.py)       MakePythonFile $i ;; 
+			*.py)       MakePythonFile $i ;;
+			*.md)       MakeMarkdownFile $i	 ;;	
 			"*") echo "没有识别文件";;
 		esac 
 	done 
 }
 
+
+#-----------------------------------
+#新建 Markdown 的模板文件
+#@param1 文件名称
+#-----------------------------------
+function MakeMarkdownFile(){
+	local fdir=$(dirname $1)
+	test ! -d $fdir && mkdir -p $fdir  #文件夹路径不存在则先新建文件
+	echo "---" > $1 
+	echo "typora-copy-images-to: images" > $1
+	echo "typora-root-url: ./" > $1
+	echo "---" > $1
+	echo " " > $1
+	echo " " > $1	
+	echo " " > $1
+}
 
 #-----------------------------------
 #新建gnuplot的模板文件
@@ -180,21 +199,35 @@ function MakeVerilogFile(){
 	echo "Date            ：$(date +%Y年%m月%d日)" >> $1
 	echo "Description     ：" >> $1
 	echo "\\*--------------------------------------------------------------------*/" >> $1
-	echo "module $mname (" >> $1
-	echo "        input clk," >> $1
-	echo "        input rst_n" >> $1
+	echo "module $mname #(" >>$1
+	echo " " >> $1 
+	echo ")(" >> $1
+	echo "    input clk," >> $1
+	echo "    input rst_n" >> $1
 	echo ");" >> $1
 	echo " " >> $1 
-	echo "always@(posedge clk or negedge rst_n)">> $1
-	echo "begin">> $1
-	echo "        if(!rst_n)begin">> $1
+	echo "/* ------------------ function -------------------- */" >> $1 
+	echo " " >> $1 
+	echo "/* -------------------- param --------------------- */" >> $1 
+	echo " " >> $1 
+	echo "/*---------------------- reg ---------------------- */" >> $1 
+	echo " " >> $1 
+	echo "/*----------------------- wire ---------------------*/" >> $1 
+	echo " " >> $1 
+	echo "/*--------------------- assign ---------------------*/" >> $1 
+	echo " " >> $1 
+	echo "/*---------------------- blk -----------------------*/" >> $1 
+	echo " " >> $1 
+	echo " " >> $1 
+	echo "always @(posedge clk or negedge rst_n) begin">> $1
+	echo "    if(!rst_n)begin">> $1
 	echo "">> $1
-	echo "        end">> $1
-	echo "        else begin">> $1
+	echo "    end else begin">> $1
 	echo "">> $1
-	echo "        end">> $1
+	echo "    end">> $1
 	echo "end">> $1
-
+	echo " " >> $1 
+	echo " " >> $1 
 	echo "endmodule">> $1
 
 	echo " "  >> $1
@@ -234,5 +267,68 @@ function MakeCppFile(){
 	echo "新建 $1 成功"
 	echo ""
 }
+
+#-----------------------------------
+#新建 .C 的模板文件
+#@param1 文件名称
+#-----------------------------------
+function MakeCFile(){
+	local fdir=$(dirname $1)
+	test ! -d $fdir && mkdir -p $fdir  #文件夹路径不存在则先新建文件夹
+	local td=$(basename $1)
+	local n1=$(echo $td | cut -d . -f1 )
+	echo "/**"> $1
+	echo " *   Copyright (C) $(date +%Y) All rights reserved."  >> $1
+	echo " *"  >> $1
+	echo " *   FileName      ：$(basename $1)"  >> $1
+	echo " *   Author        ：hpy"  >> $1
+	echo " *   Email         ：yuan_hp@qq.com"  >> $1
+	echo " *   Date          ：$(date +%Y年%m月%d日)"  >> $1
+	echo " *   Description   ："  >> $1
+	echo " */"  >> $1
+	echo "">> $1
+	echo "#include \"$n1.h\"">> $1
+	echo "">> $1
+	echo "">> $1
+	echo "int main(int argc, char* argv[])">> $1
+	echo "{">> $1
+	echo "	return 0;">> $1
+	echo "}">> $1
+	echo "">> $1
+
+	echo "新建 $1 成功"
+	echo ""
+}
+
+#-----------------------------------
+#新建 .H 的模板文件
+#@param1 文件名称
+#-----------------------------------
+function MakeHFile(){
+	local fdir=$(dirname $1)
+	test ! -d $fdir && mkdir -p $fdir  #文件夹路径不存在则先新建文件夹
+	local td=$(basename $1)
+	local n1=$(echo $td | cut -d . -f1 | tr [a-z] [A-Z])
+	local n2=$(echo $td | cut -d . -f2 | tr [a-z] [A-Z])
+	echo "/**"> $1
+	echo " *   Copyright (C) $(date +%Y) All rights reserved."  >> $1
+	echo " *"  >> $1
+	echo " *   FileName      ：$(basename $1)"  >> $1
+	echo " *   Author        ：hpy"  >> $1
+	echo " *   Email         ：yuan_hp@qq.com"  >> $1
+	echo " *   Date          ：$(date +%Y年%m月%d日)"  >> $1
+	echo " *   Description   ："  >> $1
+	echo " */"  >> $1
+	echo "#ifndef __${n1}_${n2}__" >> $1 
+	echo "#define __${n1}_${n2}__" >> $1
+	echo "">> $1
+	echo "">> $1
+	echo "">> $1
+	echo "">> $1
+	echo "#endif">> $1
+	echo "新建 $1 成功"
+	echo ""
+}
+
 
 main $*
