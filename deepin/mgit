@@ -7,11 +7,15 @@
 #-------------------------------------------------------
 #UFUNCTION=基于ssh个人穿透git
 
-ip="kz68rw1l.dongtaiyuming.net"  # 服务器域名/ip	
-port=52670 # 端口号
+ip="19.tcp.cpolar.top"  # 服务器域名/ip	
+port=13324 # 端口号
+mgit_server_dir="/data/data/com.termux/files/home/work/mgit_server" # 作为git服务端的根文件夹绝对路径地址 
 
 function mhelp() {
-    printf " Version: mgit 1.0
+    printf " Version:mgit 1.2 
+gitserver:$ip:$port
+path:$mgit_server_dir
+
 NOTE:基于ssh个人穿透git
 Usage: `basename $0` [option] [name.git] 
     -h               帮助
@@ -34,31 +38,32 @@ mgitmain(){
     # 参数解析 
     case $1 in 
         "clone") 
-            git clone ssh://git@$ip:$port/home/git/$2  ;;  # 个人仓库克隆
+            git clone ssh://git@$ip:$port$mgit_server_dir/$2  ;;  # 个人仓库克隆
         "pull")
             git pull origin master;;
         "push")
             git add . 
             dat="yhp"
-            if [ -z $3  ];then
+			echo "log:$2"
+            if [ -z $2  ];then
             	dat=$(date +%Y%m%d%H%M%S)
             else
-            	dat=$3
+            	dat=$2
             fi
             git commit -m $dat 
             git push origin master ;; 
         "init")
             test -z $2 && echo "init failed!" && mhelp && return 
             test -d $2 && echo "$2 exist!" && return
-            ssh git@$ip -p $port git init --bare $2.git && 
+            ssh git@$ip -p $port "cd $mgit_server_dir && git init --bare $2.git" &&  
             # git clone ssh://git@$ip:$port/home/git/$2 
             mkdir $2  &&
             cd $2 &&
             git init  &&
-            git remote add origin ssh://git@$ip:$port/home/git/$2 
+            git remote add origin ssh://git@$ip:$port$mgit_server_dir/$2.git  
             ;; 
         "list") 
-            str=$(ssh git@$ip -p $port "ls -d *.git")
+            str=$(ssh git@$ip -p $port "ls -d $mgit_server_dir/*.git")
             echo $str ;;
             # ssh git@$ip -p $port "ls -d *.git" ;;
         *) 
