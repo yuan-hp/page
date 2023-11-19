@@ -11,6 +11,8 @@ url="https://gitee.com/yuan_hp/page/raw/master"
 bin_path="$HOME/bin"
 fish_path="$HOME/.config/fish/functions"
 
+gettool="curl"  # wget / curl   
+
 # bin_path="bin"
 # fish_path="functions"
 function main(){
@@ -59,6 +61,7 @@ function mhelp() {
 #参数为需要安装的脚本
 #--------------------------------------
 function minstall(){
+
     local src=$(curl $url/pkg.all) #读取资源包
     local msys=$(sys_check) #检查系统
     test ! -d $fish_path && mkdir $fish_path
@@ -69,24 +72,40 @@ function minstall(){
             if [[ $(echo $src|grep "cygwin/$i") != ""   ]] ; then 
                 if [[ $i == *".fish" ]] ; then 
                     if [ $(exist $i) -eq 0 ] ; then 
-                        wget -P $fish_path "$url/cygwin/$i"
+						if [[ $gettool == "wget" ]] ; then 
+                        	wget -P $fish_path "$url/cygwin/$i"
+						else 
+							curl "$url/cygwin/$i" > $fish_path/$i 
+						fi
                         chmod +x $fish_path/$i
                     fi 
                 else
                     if [ $(exist $i) -eq 0 ] ; then 
-                        wget -P $bin_path "$url/cygwin/$i"
+						if [[ $gettool == "wget" ]] ; then 
+                        	wget -P $bin_path "$url/cygwin/$i"
+						else 
+							curl "$url/cygwin/$i" > $bin_path/$i 
+						fi
                         chmod +x $bin_path/$i
                     fi 
                 fi 
             elif [[ $(echo $src|grep "deepin/$i") != ""   ]] ; then 
                 if [[ $i == *".fish" ]] ; then 
                     if [ $(exist $i) -eq 0 ] ; then 
-                        wget -P $fish_path "$url/deepin/$i"
+						if [[ $gettool == "wget" ]] ; then 
+                        	wget -P $fish_path "$url/deepin/$i"
+						else 
+							curl "$url/deepin/$i" > $fish_path/$i 
+						fi
                         chmod +x $fish_path/$i
                     fi 
                 else
                     if [ $(exist $i) -eq 0 ] ; then 
-                        wget -P $bin_path "$url/deepin/$i"
+						if [[ $gettool == "wget" ]] ; then 
+                        	wget -P $bin_path "$url/deepin/$i"
+						else 
+							curl "$url/deepin/$i" > $bin_path/$i 
+						fi
                         chmod +x $bin_path/$i
                     fi 
                 fi 
@@ -97,10 +116,18 @@ function minstall(){
     else  #不是cygwin系统
         if [[ $(echo $src|grep "deepin/$i") != ""   ]] ; then 
             if [[ $i == *".fish" ]] ; then 
-                wget -P $fish_path "$url/deepin/$i"
+				if [[ $gettool == "wget" ]] ; then 
+                        wget -P $fish_path "$url/deepin/$i"
+				else 
+						curl "$url/deepin/$i" > $fish_path/$i 
+				fi
                 chmod +x $fish_path/$i
             else
-                wget -P $bin_path "$url/deepin/$i"
+				if [[ $gettool == "wget" ]] ; then 
+                        wget -P $bin_path "$url/deepin/$i"
+				else 
+						curl "$url/deepin/$i" > $bin_path/$i 
+				fi
                 chmod +x $bin_path/$i
             fi 
         else 
