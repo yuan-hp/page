@@ -1,0 +1,5 @@
+#!/bin/bash 
+
+
+echo https://gitee.com/yuan_hp/$1/raw/master/$2
+
