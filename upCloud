@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #UFUNCTION=自动同步当前项目至gitee仓库c
-
+  
 
 chmod +x makelist.sh 
 ./makelist.sh 
