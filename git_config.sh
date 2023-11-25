@@ -14,3 +14,4 @@ ssh-keygen -t rsa -C "$email"
 git config --global user.name "$(whoami)"
 git config --global user.email "$email"
 
+   
