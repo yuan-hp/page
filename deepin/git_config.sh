@@ -8,6 +8,14 @@
 
 email="yuan_hp@qq.com"
 
+cat ~/.ssh/id_rsa.pub
+# 已经存在则不重新生成
+if [ $? -eq 0 ] ; then
+    git config --global core.autocrlf false # 不自动转换LF为 CRLF
+    git config --global credential.helper cache --timeout7200
+    exit
+fi
+
 ssh-keygen -t rsa -C "$email"
 
 
