@@ -1,0 +1,74 @@
+#!/usr/bin/env bash
+#-------------------------------------------------------
+#	FileName	: gclone
+#	Author		：hpy
+#	Date		：2023年12月15日
+#	Description	：克隆失败自动替换git地址
+#-------------------------------------------------------
+#UFUNCTION=git克隆加速 
+
+function mhelp() {
+    printf " 
+Version: `basename $0` 1.0
+NOTE:git仓库克隆加速   
+Usage: `basename $0` gitaddr
+    gitaddr          克隆git仓库
+    -h               帮助
+示例:
+    `basename $0`  https://hub.fastgit.org/yuan-hp/Electron-learn.git
+
+    <https://gitee.com/yuan_hp/page/tree/master/deepin/$(basename $0)>
+\n" 
+}
+
+http="https://kkgithub.com 
+https://521github.com
+https://hub.fastgit.org
+https://github.com.cnpmjs.org
+https://github.com 
+https://gitee.com 
+http://fastgit.org"
+
+
+
+function gc() {
+    local fid="" 
+    # 参数解析 
+        while getopts 'b:e:mha' OPT;do
+        case $OPT in
+            h)   mhelp;return 0  ;;
+            ?)
+                mhelp
+                return 2
+                ;;
+        esac
+    done
+    shift $((OPTIND-1)) #移除已经解析的参数
+    src=$* 
+    for addr in $src 
+    do 
+        echo "git clone $addr"
+        git clone $addr 
+        test $? -eq 0 && echo "clone success: $addr" && continue  
+        ori=$addr 
+        # echo ${addr%/*}
+        addr=${addr#*//}
+        addr=${addr#*/}
+        # echo $addr 
+
+        for i in $http  
+        do 
+            if [[ "$i/$addr" == "$ori" ]] ; then 
+                continue 
+            fi 
+            echo "git clone $i/$addr"
+            git clone  $i/$addr 
+            test $? -eq 0 && echo "success:$i/$addr" && return 
+        done 
+    done 
+}
+
+
+
+#
+gc $* 
