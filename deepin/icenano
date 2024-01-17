@@ -1,0 +1,122 @@
+#!/usr/bin/env bash
+#-------------------------------------------------------
+#	FileName	: icenano.sh
+#	Author		：hpy
+#	Date		：2024年01月17日
+#	Description	：
+#-------------------------------------------------------
+
+export PATH=/cygdrive/d/msys64/mingw64/bin/:$PATH
+
+sys=$(uname -s | tr '[A-Z]' '[a-z]')
+
+function main() {
+    local upload_b=""
+    local upload_cp=""
+    local fileList=""
+    local pcf_file=""
+    local verilog_file=""
+    local clk=""
+    # 参数解析 
+    while getopts 'ufc:h' OPT;do
+        case $OPT in
+            u)upload_b="true";;
+            f)upload_cp="true";;
+            c)clk="$OPTARG";;
+            h) mhelp ;;
+            ?)
+                mhelp
+                return 2
+                ;;
+        esac
+    done
+    shift $((OPTIND-1)) #移除已经解析的参数
+    fileList=$*
+    for f in $fileList 
+    do 
+        if [[ "$f" == *".v" ]] ; then 
+            verilog_file="$verilog_file $f"
+        fi 
+
+        if [[ "$f" == *".pcf" ]] ; then 
+            pcf_file="$pcf_file $f"
+        fi 
+    done
+
+    if [ ! -z $clk ] ; then 
+        icesprog -c $clk 
+    fi 
+
+    # 综合 
+    if [ ! -z $verilog_file ] ; then
+        echo   $verilog_file
+        if [[ $sys == *'cygwin'* ]] ; then 
+            yosys -p "synth_ice40 -blif synth.blif -json synth.json" $verilog_file
+        else 
+            yosys -p "synth_ice40 -blif synth.blif -json synth.json" $verilog_file
+        fi 
+        
+        test $? -ne 0 && echo "error" && return 2 
+    fi
+
+    # 布局布线
+    if [ ! -z $pcf_file ] ; then 
+        if [[ $sys == *'cygwin'* ]] ; then 
+            nextpnr-ice40 --lp1k --package cm36 --json synth.json --pcf $pcf_file --asc synth.asc \
+            && icepack synth.asc bitstream.bin 
+        else 
+            arachne-pnr -d 1k -P cm36 -p ${pcf_file}  synth.blif -o synth.asc \
+            && icepack synth.asc bitstream.bin 
+        fi
+        test $? -ne 0 && echo "error" && return 2 
+    fi  
+
+    # 使用 icesprog 直接编程
+    if [ ! -z $upload_b ] ; then 
+        test -f  bitstream.bin  && icesprog  bitstream.bin || echo "no  bitstream.bin " 
+    fi 
+
+    # 使用 icesprog 直接编程
+    if [ ! -z $upload_cp ] ; then 
+        test -f  bitstream.bin  && cptoflash || echo "no  bitstream.bin " 
+    fi 
+}
+
+function cptoflash() {
+    local pt=$(df|awk '{print $6}')
+    for i in $pt 
+    do 
+        test ! -d $i && continue 
+        test ! -f $i/DETAILS.TXT && continue 
+        local t=$(cat $i/DETAILS.TXT | grep 'iCELink')
+        if [ ! -z t ] ; then
+            echo "Start copy to $i"
+            cp bitstream.bin  $i/synth.bin 
+            echo "Config icesugar-nano done"
+            return 0
+        fi 
+    done 
+    echo "Can not find icesugar-nano"
+    return 2 
+}
+
+function mhelp() {
+printf "$(basename $0) Version:1.0 ,this is icesugar-nano fpga tools used by yhp
+Usage:
+    $(basename $0) [u|f|c] verilog_file pcf_file
+    -u             使用icesprog配置FPGA
+    -f             使用拷贝方式配置FPGA
+    -c [1|2|3|4]   设置时钟频率,8M|12M|36M|72M
+example:
+    $(basename $0) -u top.v io.pcf   综合top.v,约束文件为io.pcf,完成后使用icesprog配置FPGA
+    $(basename $0) -f top.v io.pcf   综合top.v,约束文件为io.pcf,完成后使用拷贝方式配置FPGA
+    $(basename $0) top.v io.pcf      只综合
+    $(basename $0) -c 2              时钟设置为 12MHz
+    <https://gitee.com/yuan_hp/page/blob/master/deepin/icenano>
+"
+}
+
+
+main $* 
+# cptoflash
+
