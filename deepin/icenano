@@ -112,6 +112,17 @@ example:
     $(basename $0) -f top.v io.pcf   综合top.v,约束文件为io.pcf,完成后使用拷贝方式配置FPGA
     $(basename $0) top.v io.pcf      只综合
     $(basename $0) -c 2              时钟设置为 12MHz
+
+IO引脚
+    # 时钟引脚
+    # set_frequency clk 12
+    set_io clk D1  
+    # led
+    set_io led B6
+    # 调试串口 
+    set_io rxd  A3  
+    set_io txd  B3
+
     <https://gitee.com/yuan_hp/page/blob/master/deepin/icenano>
 "
 }
