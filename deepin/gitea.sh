@@ -32,10 +32,12 @@ fi
 
 
 # 获取gitea 个人服务器的网址
-git_server=$(curl -s $url/gitea.url)
+git_server="https://$(curl -s $url/gitea.port|cut -d: -f1)"
 test $? -ne 0 && echo "can not get git_server addr" && exit 1
 echo "git_server:$git_server"
 
+
+test #{#git_server} -le 3 && echo "failed get server" && exit 1
 
 
 # 如果当前文件夹存在 .git 文件夹，则修正远程地址
@@ -45,6 +47,10 @@ if [ -d .git ] && [ -f .giteamark ] ; then
     oldurl=$(cat .git/config | grep url | awk '{print $3}')
     gitname=$(basename $(dirname $oldurl))/$(basename $oldurl)
     git remote set-url origin "$git_server/$gitname"
+
+    if [ -f .git/config ] ; then 
+        sed -i 's#//#//yhp:yhp123456@#' .git/config 
+    fi 
 fi 
 
 if [ $# -eq 0 ]; then 
@@ -69,7 +75,8 @@ fi
 
 
 # 推送仓库到远端服务器
-if [[ "$1" == "push" ]] && [ -d .git ] ; then     
+if [[ "$1" == "push" ]] && [ -d .git ] && [ ${#git_server} -gt 3 ] ; then   
+
     git status
     git add .
     if [[ $# -eq 1 ]];then
