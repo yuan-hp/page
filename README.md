@@ -91,7 +91,7 @@ chmod +x ~/bin/pkg
 | [gplt](./deepin/gplt)                 | 调用gnuplot从文件中按列取数据画图                            | pkg install gplt       |
 | [cpdll](./cygwin/cpdll)               | cygwin下查找exe的依赖dll并将dll拷贝到当前文件夹               |                        |
 | [git_config.sh](./deepin/git_config.sh)| 我的git配置                                              |                        |
-|                                       |                                                              |                        |
+| [autountar](./deepin/autountar) | 根据压缩文件后缀自动匹配解压 | pkg install autountar |
 |                                       |                                                              |                        |
 |                                       |                                                              |                        |
 |                                       |                                                              |                        |

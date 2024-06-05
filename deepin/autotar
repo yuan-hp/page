@@ -1,0 +1,19 @@
+#!/usr/bin/env bash 
+
+
+
+function myautountar() {
+    case $1 in 
+      *.tar.gz)     tar -zxvf $1 ;;
+      *.tar.bz2)    tar -xjvf $1 ;;
+      *.tar.z)      tar -xZvf  $1 ;;
+      *.tar)        tar -xf   $1 ;;
+      *.bz2)        bunzip2   $1 ;;
+      *.tgz)        tar -zxvf $1 ;;
+      *.zip)        unzip $1 ;;
+      *.rar)        tar -xzpvf $1 ;;
+      *) echo "unknown what type";;
+    esac 
+}
+
+myautountar $1 
