@@ -1,0 +1,146 @@
+#!/usr/bin/env bash
+#-------------------------------------------------------
+#	FileName	: prj.sh
+#	Author		：hpy
+#	Date		：2024年06月05日
+#	Description	：项目模板管理
+#-------------------------------------------------------
+
+url="https://gitee.com/yuan_hp/start-prj/raw/master"
+GETTOOL="wget" 
+version="2.0.0"
+
+function main(){
+
+    #预处理命令
+    if [ $# -gt 0 ] ; then 
+        cmd=$1
+        str=""  #读取除开命令的其他参数
+        idx=0
+        for i in $*
+        do 
+            test ! $idx -eq 0 && str="$str $i"
+            idx=$((idx+1))
+        done 
+    fi 
+
+    case $cmd in 
+        "list"|"l")   mlist ;;  #列出所有资源包
+        "search"|"s") msearch $str;;  #
+        "filter"|"f") mfilter $str;; # 筛选模板并选择模板新建工程
+        "update"|"u") update;;
+        *) mhelp ;; #帮助
+    esac 
+}
+
+function update() {
+    script=".nane"
+    curl $url/prj > $script && cat $script >  $(dirname $0)/$(basename $0)
+    chmod +x  $(dirname $0)/$(basename $0)
+    rm $script 
+
+}
+
+#-------------------------------------------------------
+# 终端分割线
+#-------------------------------------------------------
+function fg() {
+    shellwidth=`stty size|awk '{print $2}'`
+    yes "-" 2>/dev/null | sed $shellwidth'q' | tr -d '\n'
+}
+
+function download() {
+    test -f $(basename $i) && rm -rf $(basename $i)
+    if [[ $GETTOOL == "wget" ]] ; then 
+        wget "$1"
+	else 
+        curl "$1" > $(basename $i)
+	fi
+}
+
+function mlist() {
+    local src=$(curl $url/template.list) #读取资源包
+    local idx=0
+    fg
+    PS3="输入你要新建的工程模板:"
+    select i in exit $src  
+    do 
+        if [[ $i == "exit" ]] ; then 
+            echo "退出"
+            exit 0
+        else 
+            fg
+            read -p "请输入工程名称:" prjname
+            echo "开始创建 $prjname 工程"
+            test -d $prjname && echo " $prjname工程已存在" && exit -1 || mkdir $prjname
+            echo $(basename $i)
+            download $url/$i && tar -zxf $(basename $i) -C $prjname --strip-components 1 \
+            && rm -rf $(basename $i) && fg && echo "工程 $prjname 创建成功"
+            exit 0
+        fi    
+    done
+}
+
+
+function mfilter() {
+    local asrc=$(curl $url/template.list) #读取资源包
+    local src=""
+    for i in $*
+    do 
+        src=$src" "$(echo $asrc | tr [' '] ['\n']| grep -i $i)
+    done 
+
+    local idx=0
+    fg
+    PS3="输入你要新建的工程模板:"
+    select i in exit $src  
+    do 
+        if [[ $i == "exit" ]] ; then 
+            echo "退出"
+            exit 0
+        else 
+            fg
+            read -p "请输入工程名称:" prjname
+            echo "开始创建 $prjname 工程"
+            test -d $prjname && echo " $prjname工程已存在" && exit -1 || mkdir $prjname
+            echo $(basename $i)
+            download $url/$i && tar -zxf $(basename $i) -C $prjname --strip-components 1 \
+            && rm -rf $(basename $i) && fg && echo "工程 $prjname 创建成功"
+            exit 0
+        fi    
+    done
+}
+
+#--------------------------
+#列出所有资源包
+#--------------------------
+function msearch() {
+    local src=$(curl $url/template.list) #读取资源包
+    fg
+    echo "Search $i:"
+    for i in $*
+    do 
+        echo $src | tr [' '] ['\n']| grep $i
+    done 
+}
+
+#---------------------------------------
+#显示帮助
+#---------------------------------------
+function mhelp() {
+    echo " $(basename $0) version:$version ,Pull project template to create new project!"
+    echo "    $(basename $0) l|list            显示所有工程模板，根据提示可新建工程"
+    echo "    $(basename $0) f|filter str1 ... 显示含有关键字str1 ..的工程模板，根据提示可新建工程"
+	echo "    $(basename $0) s|search str      根据关键字搜索工程模板"
+    echo "    $(basename $0) u|update          更新$(basename $0)"
+    echo "    $(basename $0) help              显示帮助"
+
+    echo 
+    
+}
+
+main $* 
+
+
+
+

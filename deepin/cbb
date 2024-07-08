@@ -1,0 +1,184 @@
+#!/usr/bin/env bash
+#-------------------------------------------------------
+#	FileName	: prj.sh
+#	Author		：hpy
+#	Date		：2024年06月05日
+#	Description	：项目模板管理
+#-------------------------------------------------------
+
+url="https://gitee.com/yuan_hp/fpga-cbb/raw/master"
+GETTOOL="wget" 
+srclist="cbb.list"
+version="1.0.0"
+notesrc="cbb.note"
+
+function main(){
+
+    #预处理命令
+    if [ $# -gt 0 ] ; then 
+        cmd=$1
+        str=""  #读取除开命令的其他参数
+        idx=0
+        for i in $*
+        do 
+            test ! $idx -eq 0 && str="$str $i"
+            idx=$((idx+1))
+        done 
+    fi 
+
+    case $cmd in 
+        "list"|"l")   mlist ;;  #列出所有资源包
+        "search"|"s") mnote $str;;  #
+        "filter"|"f") mfilter $str;; # 筛选模板并选择模板新建工程
+        "pull"|"p")   mpull $str;; # 筛选模板并选择模板新建工程
+        # "note"|"n")     mnote  $str;; # 查看简要说明
+        "update"|"u") curl $url/$(basename $0) > $(dirname $0)/$(basename $0) && chmod +x $(dirname $0)/$(basename $0) ;;
+        *) mhelp ;; #帮助
+    esac 
+}
+
+#-------------------------------------------------------
+# 终端分割线
+#-------------------------------------------------------
+function fg() {
+    shellwidth=`stty size|awk '{print $2}'`
+    yes "-" 2>/dev/null | sed $shellwidth'q' | tr -d '\n'
+}
+
+function download() {
+    test -f $(basename $i) && rm -rf $(basename $i)
+    if [[ $GETTOOL == "wget" ]] ; then 
+        wget "$1"
+	else 
+        curl "$1" > $(basename $i)
+	fi
+}
+
+function getfromselect() {
+    local i=$1
+    if [[ $i == "exit" ]] ; then 
+        echo "退出"
+        exit 0
+    else 
+        fg
+        echo "开始拉取 $i 资源"
+        
+        echo $(basename $i)
+        test ! -d cbb-lib && mkdir cbb-lib 
+        cd cbb-lib && download $url/$i && tar -zxf $(basename $i) \
+        && rm -rf $(basename $i) && cd - && fg && echo "cbb $i 拉取成功"
+    fi  
+}
+
+function mlist() {
+    local src=$(curl $url/$srclist) #读取资源包
+    local idx=0
+    fg
+    PS3="输入你要拉取的cbb序号:"
+
+    choices=( 'exit' $src ) # sample choices
+    select dummy in "${choices[@]}"; do  # present numbered choices to user
+        IFS=', ' read -ra selChoices <<<"$REPLY"
+        # Loop over all numbers entered.
+        for choice in "${selChoices[@]}"; do
+            # Validate the number entered.
+            (( choice >= 1 && choice <= ${#choices[@]} )) || { echo "Invalid choice: $choice. Try again." >&2; continue 2; }
+            # If valid, echo the choice and its number.
+            # echo "Choice #$(( ++i )): ${choices[choice-1]} ($choice)"
+            getfromselect ${choices[choice-1]}
+        done
+        # All choices are valid, exit the prompt.
+        break
+    done
+    exit 
+}
+
+# -----------------------------
+# 拉取指定资源
+# -----------------------------
+function mpull() {
+    local src=""
+    for i in $* 
+    do 
+        echo "pull cbb $i"
+        getfromselect cbb_src/$i.tar.gz
+        test $? -ne 0 && echo "error:pull $i failed!" && exit 2
+    done 
+    fg
+    exit 
+}
+
+function mfilter() {
+    local asrc=$(curl $url/$srclist) #读取资源包
+    local src=""
+    for i in $*
+    do 
+        src=$src" "$(echo $asrc | tr [' '] ['\n']| grep -i $i)
+    done 
+
+    local idx=0
+    fg
+    PS3="输入你要拉取的cbb序号:"
+    choices=( 'exit' $src ) # sample choices
+    select dummy in "${choices[@]}"; do  # present numbered choices to user
+        IFS=', ' read -ra selChoices <<<"$REPLY"
+        # Loop over all numbers entered.
+        for choice in "${selChoices[@]}"; do
+            # Validate the number entered.
+            (( choice >= 1 && choice <= ${#choices[@]} )) || { echo "Invalid choice: $choice. Try again." >&2; continue 2; }
+            # If valid, echo the choice and its number.
+            # echo "Choice #$(( ++i )): ${choices[choice-1]} ($choice)"
+            getfromselect ${choices[choice-1]}
+        done
+        # All choices are valid, exit the prompt.
+        break
+    done
+}
+
+#--------------------------
+#列出所有资源包
+#--------------------------
+function msearch() {
+    local src=$(curl $url/$srclist) #读取资源包
+    fg
+    echo "Search $i:"
+    for i in $*
+    do 
+        echo $src | tr [' '] ['\n']| grep $i
+    done 
+}
+
+#--------------------------
+# 查看cbb的简要说明
+#--------------------------
+function mnote() {
+    curl $url/$notesrc  > /tmp/cbb.note #读取资源包
+    fg
+    if [ $# -gt 0 ] ; then 
+        for i in $*
+        do 
+            cat /tmp/cbb.note  |sed 's/ \+/ /g'|  grep $i | column -s' ' -t 
+        done 
+    else
+        cat /tmp/cbb.note  |sed 's/ \+/ /g' | column -s' ' -t 
+    fi 
+}
+
+
+#---------------------------------------
+#显示帮助
+#---------------------------------------
+function mhelp() {
+    echo " $(basename $0) version:$version ,fpga cbb repo!"
+    echo "    $(basename $0) p|pull c1 c2 ...  拉取c1,c2"
+    echo "    $(basename $0) l|list            列出所有cbb,拉取需要的cbb"
+    echo "    $(basename $0) f|filter str1 ... 拉取含有指定关键字的cbb"
+	echo "    $(basename $0) s|search str      搜索cbb,并显示简要说明"
+    echo "    $(basename $0) u|update          更新$(basename $0)"
+    echo "    $(basename $0) help              显示帮助"
+
+    echo 
+    
+}
+
+main $* 
