@@ -71,14 +71,17 @@ function select-platform() {
             && echo "Push to ${GITHUB_HEAD}/$GIT_NAME Success"
             break
         elif [[ $i == 'all' ]] ; then
-            git remote set-url origin   ${GITEA_HEAD}/$GIT_NAME && git push \
-            && git remote set-url origin  ${GITEE_HEAD}/$GIT_NAME && git push
-
             for i in $(cat $GIT_PLAT) 
             do
                 if [[ "$i" == "gitea" ]] ; then 
                     git remote set-url origin   ${GITEA_HEAD}/$GIT_NAME && git push \
-                    && echo "Push to ${GITHUB_HEAD}/$GIT_NAME Success" || echo "Push to ${GITHUB_HEAD}/$GIT_NAME Failed" 
+                    && echo "Push to ${GITEA_HEAD}/$GIT_NAME Success" || echo "Gitea:Push to ${GITEA_HEAD}/$GIT_NAME Failed"  
+                elif [[ "$i" == "gitee" ]] ; then 
+                    git remote set-url origin   ${GITEE_HEAD}/$GIT_NAME && git push \
+                    && echo "Push to ${GITEA_HEAD}/$GIT_NAME Success" || echo "Gitee:Push to ${GITEE_HEAD}/$GIT_NAME Failed" 
+                elif [[ "$i" == "github" ]] ; then 
+                    git remote set-url origin   ${GITHUB_HEAD}/$GIT_NAME && git push \
+                    && echo "Push to ${GITHUB_HEAD}/$GIT_NAME Success" || echo "Github:Push to ${GITHUB_HEAD}/$GIT_NAME Failed" 
                 fi 
             done 
             break 
