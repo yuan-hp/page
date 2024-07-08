@@ -96,7 +96,7 @@ function commit_type() {
     # echo " -------------------- "
     fg
     PS3="commit的类型:"
-    select i in exit "新功能" "直接一次修复bug" "产生diff多次修复bug" "文档" "格式" "重构" "优化" "测试" "回滚到上一个版本" "代码合并" "同步Bug"
+    select i in exit "新功能" "直接一次修复bug" "产生diff多次修复bug" "文档" "格式" "重构" "优化" "测试" "回滚到上一个版本" "代码合并" "同步Bug" "过程或辅助工具变动"
     do 
         if [[ $i == "exit" ]] ; then 
             exit 0
@@ -132,6 +132,9 @@ function commit_type() {
             break
         elif [[ $i == "同步Bug" ]] ; then
             git commit -m "sync:$*" 
+            break
+        elif [[ $i == "过程或辅助工具变动" ]] ; then
+            git commit -m "chore:$*" 
             break
         fi    
     done 
