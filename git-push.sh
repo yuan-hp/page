@@ -1,16 +1,16 @@
 #!/usr/bin/env bash
 #-------------------------------------------------------
-#	FileName	: push.sh
+#	FileName	: git-push
 #	Author		：hpy
-#	Date		：2024年03月25日
+#	Date		：2024年07月08日
 #	Description	：git 规范化推送 
 #   https://zhuanlan.zhihu.com/p/182553920
 #-------------------------------------------------------
 
 # 仓库平台前缀
-GITEE_HEAD="https://yuan_hp:5bb75321ff4fef60ff9e7ab47692b697@gitee.com/yuan_hp"
-GITEA_HEAD="http://yhp:c367aca0a07d0779f62208d8bfe24f4d1fe8a9c8@120.46.47.28:3000/yhp"
-GITHUB_HEAD="http://yhp:c367aca0a07d0779f62208d8bfe24f4d1fe8a9c8@120.46.47.28:3000/yhp"
+test -z $GITEE_PREX && GITEE_PREX="https://yuan_hp:5bb75321ff4fef60ff9e7ab47692b697@gitee.com/yuan_hp"
+test -z $GITEA_PREX && GITEA_PREX="http://yhp:c367aca0a07d0779f62208d8bfe24f4d1fe8a9c8@120.46.47.28:3000/yhp"
+test -z $GITHUB_PREX && GITHUB_PREX="https://yuan-hp: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@github.com/yuan-hp"
 
 ROOTDIR=$(pwd)
 # 仓库名称
@@ -59,29 +59,29 @@ function select-platform() {
         if [[ $i == "exit" ]] ; then 
             exit 0
         elif [[ $i == "gitea" ]] ; then
-            git remote set-url origin  ${GITEA_HEAD}/$GIT_NAME && git push \
-            && echo "Gitea:Push to ${GITEA_HEAD}/$GIT_NAME Success"  || echo "Gitea:Push to ${GITEA_HEAD}/$GIT_NAME Failed"
+            git remote set-url origin  ${GITEA_PREX}/$GIT_NAME && git push \
+            && echo "Gitea:Push to ${GITEA_PREX}/$GIT_NAME Success"  || echo "Gitea:Push to ${GITEA_PREX}/$GIT_NAME Failed"
             break
         elif [[ $i == "gitee" ]] ; then 
-            git remote set-url origin ${GITEE_HEAD}/$GIT_NAME && git push \
-            && echo "Gitee:Push to ${GITEE_HEAD}/$GIT_NAME Success"  || echo "Gitee:Push to ${GITEA_HEAD}/$GIT_NAME Failed"
+            git remote set-url origin ${GITEE_PREX}/$GIT_NAME && git push \
+            && echo "Gitee:Push to ${GITEE_PREX}/$GIT_NAME Success"  || echo "Gitee:Push to ${GITEA_PREX}/$GIT_NAME Failed"
             break
         elif [[ $i == "github" ]] ; then 
-            git remote set-url origin ${GITHUB_HEAD}/$GIT_NAME && git push \
-            && echo "Github:Push to ${GITHUB_HEAD}/$GIT_NAME Success"  || echo "Github:Push to ${GITEA_HEAD}/$GIT_NAME Failed"
+            git remote set-url origin ${GITHUB_PREX}/$GIT_NAME && git push \
+            && echo "Github:Push to ${GITHUB_PREX}/$GIT_NAME Success"  || echo "Github:Push to ${GITEA_PREX}/$GIT_NAME Failed"
             break
         elif [[ $i == 'all' ]] ; then
             for i in $(cat $GIT_PLAT) 
             do
                 if [[ "$i" == "gitea" ]] ; then 
-                    git remote set-url origin   ${GITEA_HEAD}/$GIT_NAME && git push \
-                    && echo "Gitea:Push to ${GITEA_HEAD}/$GIT_NAME Success" || echo "Gitea:Push to ${GITEA_HEAD}/$GIT_NAME Failed"  
+                    git remote set-url origin   ${GITEA_PREX}/$GIT_NAME && git push \
+                    && echo "Gitea:Push to ${GITEA_PREX}/$GIT_NAME Success" || echo "Gitea:Push to ${GITEA_PREX}/$GIT_NAME Failed"  
                 elif [[ "$i" == "gitee" ]] ; then 
-                    git remote set-url origin   ${GITEE_HEAD}/$GIT_NAME && git push \
-                    && echo "Gitee:Push to ${GITEE_HEAD}/$GIT_NAME Success" || echo "Gitee:Push to ${GITEE_HEAD}/$GIT_NAME Failed" 
+                    git remote set-url origin   ${GITEE_PREX}/$GIT_NAME && git push \
+                    && echo "Gitee:Push to ${GITEE_PREX}/$GIT_NAME Success" || echo "Gitee:Push to ${GITEE_PREX}/$GIT_NAME Failed" 
                 elif [[ "$i" == "github" ]] ; then 
-                    git remote set-url origin   ${GITHUB_HEAD}/$GIT_NAME && git push \
-                    && echo "Github:Push to ${GITHUB_HEAD}/$GIT_NAME Success" || echo "Github:Push to ${GITHUB_HEAD}/$GIT_NAME Failed" 
+                    git remote set-url origin   ${GITHUB_PREX}/$GIT_NAME && git push \
+                    && echo "Github:Push to ${GITHUB_PREX}/$GIT_NAME Success" || echo "Github:Push to ${GITHUB_PREX}/$GIT_NAME Failed" 
                 fi 
             done 
             break 
