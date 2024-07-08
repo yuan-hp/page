@@ -21,7 +21,7 @@ GIT_PLAT=".pushconf"
 function init-config() {
     test -f $GIT_PLAT  && return 
     fg 
-    PS3="配置你要推送的平台:"
+    PS3="配置你要推送的平台:" 
     choices=( 'exit' 'gitee' 'gitea' 'github') # sample choices
     select dummy in "${choices[@]}"; do  # present numbered choices to user
         IFS=', ' read -ra selChoices <<<"$REPLY"
